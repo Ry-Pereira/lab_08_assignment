@@ -9,6 +9,7 @@ Code, Compile, Run and Debug online from anywhere in world.
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <cmath>
 using namespace std;
 
 int main()
@@ -21,16 +22,26 @@ int main()
     
     
     string line;
+    int m = 2;
     ifstream myfile(matrix_numbers_text_file_name);
     if (myfile.is_open()){
         while (getline(myfile,line)){
-            if(line.empty()){
-                cout << "EMpty" << "\n";
-            }
-            else{
-                cout << line.size() << "\n";
+            for(int i = 0; i < line.size(); i++){
                 
+                if(i == m){
+                    cout << "e";
+                    m+=3;
+                }
+                else if(i < 3){
+                    cout << line[i];
+                }
+                else{
+                    cout << line[i];
+                }
             }
+            m= 2;
+            
+            cout << "\n";
           
             
         }
