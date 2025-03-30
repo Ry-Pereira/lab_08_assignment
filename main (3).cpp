@@ -97,6 +97,58 @@ pair<Matrix,Matrix> create_matrices(string matrix_text_file){
 		return {matrix1,matrix2};
 	}
 }
+Matrix create_matrice(string matrix_text_file){
+    string line;
+	int n = 1;
+	int m=-1;
+	int j = 0;
+	int size_of_matrix;
+
+	ifstream myfile(matrix_text_file);
+	if (myfile.is_open()) {
+		Matrix matrix1(0,0);
+		Matrix matrix2(0,0);
+		while (getline(myfile,line)) {
+			if(!line.empty() && line.back() == '\n') {
+				//Removes the newline character at the end of the line
+				line.pop_back();
+			}
+			if(n ==1) {
+				std::stringstream ss(line);
+				cout << line<< "\n";
+				ss >> size_of_matrix;
+				int rows = size_of_matrix;
+				int columns = size_of_matrix;
+				matrix1 = Matrix(rows,columns);
+				matrix2 = Matrix(rows,columns);
+
+			}
+			else {
+				std::stringstream ss(line);
+				string s;
+
+				if(line.size()-1) {
+
+					if(m < size_of_matrix) {
+						for(int i = 0; i<size_of_matrix; i++) {
+							std::getline(ss,s,' ');
+							int value = stoi(s);
+							matrix1.store_value(i,m,value);
+							cout<<"MS Row: "<<m<< " Column: "<<i<< " Value: "<<value << "\n";
+						}
+					}
+
+				}
+
+				m++;
+				
+			}
+			n++;
+		}
+		myfile.close();
+		return {matrix1,matrix2};
+	}
+}
 
 Matrix add_matrices(Matrix matrix_1,Matrix matrix_2){
     Matrix result_matrix{matrix_1.number_of_rows,matrix_1.number_of_columns};
