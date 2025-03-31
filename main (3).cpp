@@ -22,13 +22,13 @@ public:
 		grid[row][column] = value;
 	}
 	void print_grid() {
-	    cout<< "Column ";
+	    cout<< "Col ";
 	    for(int column = 0; column < number_of_columns+1; column++){
-	        cout<< column << " ";
+	        cout<< column << "|";
 	    }
 	    cout<<"\n";
 		for(int row= 0; row<number_of_rows; row++) {
-	        cout<< "Row "<<row << " ";
+	        cout<< "Row "<<row << "| ";
 			for(int column = 0; column < number_of_columns; column++) {
 				cout<<grid[row][column]<< " ";
 			}
@@ -45,11 +45,12 @@ pair<Matrix,Matrix> create_matrices(string matrix_text_file) {
 	int m=-1;
 	int j = 0;
 	int size_of_matrix;
+	Matrix matrix1(0,0);
+	Matrix matrix2(0,0);
 
 	ifstream myfile(matrix_text_file);
 	if (myfile.is_open()) {
-		Matrix matrix1(0,0);
-		Matrix matrix2(0,0);
+	
 		while (getline(myfile,line)) {
 			if(!line.empty() && line.back() == '\n') {
 				//Removes the newline character at the end of the line
@@ -92,29 +93,27 @@ pair<Matrix,Matrix> create_matrices(string matrix_text_file) {
 						}
 						j++;
 					}
-
 				}
-
 				m++;
-
 			}
 			n++;
 		}
-		myfile.close();
-		return {matrix1,matrix2};
+		
 	}
+	myfile.close();
+	return {matrix1,matrix2};
 }
 Matrix create_matrice(string matrix_text_file) {
 	string line;
 	int n = 1;
-	int m=-1;
+	int m= -1;
 	int j = 0;
 	int size_of_matrix;
+	Matrix matrix1(0,0);
 
 	ifstream myfile(matrix_text_file);
 	if (myfile.is_open()) {
-		Matrix matrix1(0,0);
-		Matrix matrix2(0,0);
+	
 		while (getline(myfile,line)) {
 			if(!line.empty() && line.back() == '\n') {
 				//Removes the newline character at the end of the line
@@ -122,12 +121,10 @@ Matrix create_matrice(string matrix_text_file) {
 			}
 			if(n ==1) {
 				std::stringstream ss(line);
-				cout << line<< "\n";
 				ss >> size_of_matrix;
 				int rows = size_of_matrix;
 				int columns = size_of_matrix;
 				matrix1 = Matrix(rows,columns);
-				matrix2 = Matrix(rows,columns);
 
 			}
 			else {
@@ -138,8 +135,8 @@ Matrix create_matrice(string matrix_text_file) {
 						for(int i = 0; i<size_of_matrix; i++) {
 							std::getline(ss,s,' ');
 							int value = stoi(s);
-							matrix1.store_value(i,m,value);
-							cout<<"MS Row: "<<m<< " Column: "<<i<< " Value: "<<value << "\n";
+							matrix1.store_value(m,i,value);
+							
 						}
 					}
 				}
@@ -147,9 +144,10 @@ Matrix create_matrice(string matrix_text_file) {
 			}
 			n++;
 		}
-		myfile.close();
-		return matrix1;
 	}
+	
+	myfile.close();
+	return matrix1;
 }
 
 Matrix add_matrices(Matrix matrix_1,Matrix matrix_2) {
@@ -186,25 +184,24 @@ Matrix multiply_matrices(Matrix matrix_1,Matrix matrix_2) {
 }
 
 void sum_diagonal(Matrix matrix_1) {
+   
 	int d = 0;
 	int matrix_1_result_main_sum = 0;
 	int matrix_1_result_secondary_sum = 0;
 
-	Matrix result_matrix_1{matrix_1.number_of_rows,matrix_1.number_of_columns};
-
 	for(int row = 0; row < matrix_1.number_of_rows; row++) {
 		matrix_1_result_main_sum+= matrix_1.grid[row][d];
+
 		d++;
 	}
-	
-	d = matrix_1.number_of_columns -1;
-	for(int row = matrix_1.number_of_rows; row > 0; row--) {
+	d = matrix_1.number_of_columns-1;
+	for(int row = 0; row < matrix_1.number_of_rows; row++) {
 		matrix_1_result_secondary_sum+= matrix_1.grid[row][d];
+		
 		d--;
 	}
-
-	cout<< matrix_1_result_main_sum << "\n";
-	cout<< matrix_1_result_secondary_sum << "\n";
+	cout<<"Matrix Main Diagonal Sum " << matrix_1_result_main_sum << "\n";
+	cout<<"Matrix Secondary Diagonal Sum"<< matrix_1_result_secondary_sum << "\n";
 
 
 }
@@ -255,11 +252,11 @@ Matrix swap_columns(Matrix matrix_1,int column_num_1,int column_num_2) {
 	else {
 		for(int row = 0; row< matrix_1.number_of_rows; row++) {
 			int value = matrix_1.grid[row][column_num_2];
-			result_matrix.store_value(column_num_1,row,value);
+			result_matrix.store_value(row,column_num_1,value);
 		}
 		for(int row = 0; row< matrix_1.number_of_rows; row++) {
 			int value = matrix_1.grid[row][column_num_1];
-			result_matrix.store_value(column_num_2,row,value);
+			result_matrix.store_value(row,column_num_2,value);
 		}
 		return result_matrix;
 	}
@@ -337,6 +334,7 @@ void choice_selection() {
 		cout<<"Enter Matrix Numbers Text File Name: ";
 		cin >> matrix_numbers_text_file_name;
 		matrix = create_matrice(matrix_numbers_text_file_name);
+		matrix.print_grid();
 		sum_diagonal(matrix);
 		break;
 	}
@@ -395,7 +393,9 @@ void choice_selection() {
 }
 int main()
 {
-	cout<<"Hello Welcome to Matrix Operations and ETC." << "\n";
+	cout<<"Hello Welcome to Matrix Operations and ETC." << "\n\n";
+	print_menu();
+	cout<< "\n";
 	choice_selection();
 	return 0;
 }
