@@ -171,9 +171,10 @@ Matrix multiply_matrices(Matrix matrix_1,Matrix matrix_2) {
 	Matrix result_matrix{matrix_1.number_of_rows,matrix_1.number_of_columns};
 
 	for(int row=0; row<matrix_1.number_of_rows; row++) {
-		for(int column = 0; column < matrix_1.number_of_columns; column) {
-			for(int colu = 0; colu < matrix_2.number_of_columns; colu) {
-				int value = matrix_1.grid[row][colu] * matrix_2.grid[colu][row];
+		for(int column = 0; column < matrix_1.number_of_columns; column++) {
+		    int value = 0;
+			for(int colu = 0; colu < matrix_2.number_of_columns; colu++) {
+				value += matrix_1.grid[row][colu] * matrix_2.grid[colu][column];
 				result_matrix.store_value(row,column,value);
 			}
 
@@ -325,6 +326,8 @@ void choice_selection() {
 		matrix1 = matrices.first;
 		matrix2 = matrices.second;
 		result = multiply_matrices(matrix1,matrix2);
+		cout<<"Result: \n";
+		result.print_grid();
 		break;
 	}
 	case 4:
