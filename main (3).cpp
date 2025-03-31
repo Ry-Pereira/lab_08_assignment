@@ -196,6 +196,8 @@ void sum_diagonal(Matrix matrix_1) {
 		matrix_1_result_main_sum+= matrix_1.grid[row][d];
 		d++;
 	}
+	
+	d = matrix_1.number_of_columns -1;
 	for(int row = matrix_1.number_of_rows; row > 0; row--) {
 		matrix_1_result_secondary_sum+= matrix_1.grid[row][d];
 		d--;
@@ -333,6 +335,7 @@ void choice_selection() {
 	case 4:
 	{
 		cout<<"Enter Matrix Numbers Text File Name: ";
+		cin >> matrix_numbers_text_file_name;
 		matrix = create_matrice(matrix_numbers_text_file_name);
 		sum_diagonal(matrix);
 		break;
@@ -340,21 +343,50 @@ void choice_selection() {
 	case 5:
 	{
 		cout<<"Enter Matrix Numbers Text File Name: ";
+		cin >> matrix_numbers_text_file_name;
 		matrix = create_matrice(matrix_numbers_text_file_name);
-		sum_diagonal(matrix);
+		int row1;
+		int row2;
+		cout<<"Enter Row 1 to Swap";
+		cin >> row1;
+		cout<<"Enter Row 2 to Swap";
+		cin >> row2;
+		result = swap_rows(matrix,row1,row2);
+		result.print_grid();
 		break;
 	}
 	case 6:
 	{
 		cout<<"Enter Matrix Numbers Text File Name: ";
+		cin >> matrix_numbers_text_file_name;
 		matrix = create_matrice(matrix_numbers_text_file_name);
-		sum_diagonal(matrix);
+		int column1;
+		int column2;
+		cout<<"Enter Column 1 to Swap";
+		cin >> column1;
+		cout<<"Enter Column 2 to Swap";
+		cin >> column2;
+		result = swap_columns(matrix,column1,column2);
+		result.print_grid();
 		break;
 	}
 	case 7:
 	{
 		cout<<"Enter Matrix Numbers Text File Name: ";
 		cin >> matrix_numbers_text_file_name;
+		matrix = create_matrice(matrix_numbers_text_file_name);
+		int col;
+		int row;
+		int val;
+		cout<<"Enter ROw: ";
+		cin>>row;
+		cout<<"Enter col: ";
+		cin>>col;
+		cout<<"Enter Val: ";
+		cin>>val;
+		result = update_matrix(matrix,row,col,val);
+		result.print_grid();
+		
 		break;
 	}
 
