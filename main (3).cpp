@@ -22,8 +22,13 @@ public:
 		grid[row][column] = value;
 	}
 	void print_grid() {
+	    cout<< "Column ";
+	    for(int column = 0; column < number_of_columns+1; column++){
+	        cout<< column << " ";
+	    }
+	    cout<<"\n";
 		for(int row= 0; row<number_of_rows; row++) {
-		    cout<< "Row"<<row;
+	        cout<< "Row "<<row << " ";
 			for(int column = 0; column < number_of_columns; column++) {
 				cout<<grid[row][column]<< " ";
 			}
@@ -71,7 +76,7 @@ pair<Matrix,Matrix> create_matrices(string matrix_text_file) {
 							std::getline(ss,s,' ');
 							int value = stoi(s);
 							matrix1.store_value(m,i,value);
-							cout<<"MS Row: "<<m<< " Column: "<<i<< " Value: "<<value << "\n";
+					
 						}
 						if(m == size_of_matrix) {
 							cout<<"\n";
@@ -83,7 +88,7 @@ pair<Matrix,Matrix> create_matrices(string matrix_text_file) {
 							std::getline(ss,s,' ');
 							int value = stoi(s);
 							matrix2.store_value(j,i,value);
-							cout<<"MR Row "<<j<< " Column: "<<i<< " Value: "<<value << "\n";
+							
 						}
 						j++;
 					}
@@ -148,17 +153,17 @@ Matrix create_matrice(string matrix_text_file) {
 }
 
 Matrix add_matrices(Matrix matrix_1,Matrix matrix_2) {
-	Matrix result_matrix{matrix_1.number_of_rows,matrix_1.number_of_columns};
+	Matrix result_matrix(matrix_1.number_of_rows,matrix_1.number_of_columns);
 
 	for(int row=0; row<matrix_1.number_of_rows; row++) {
-		for(int column = 0; column < matrix_1.number_of_columns; column) {
+		for(int column = 0; column < matrix_1.number_of_columns; column++) {
 			int value = matrix_1.grid[row][column] + matrix_2.grid[row][column];
 			result_matrix.store_value(row,column,value);
-
 		}
-
 	}
-
+    cout<<"hello";
+    cout<<"Out"<< result_matrix.grid[0][0] << "\n";
+    
 	return result_matrix;
 }
 
@@ -175,7 +180,7 @@ Matrix multiply_matrices(Matrix matrix_1,Matrix matrix_2) {
 		}
 
 	}
-
+  
 	return result_matrix;
 }
 
@@ -293,7 +298,10 @@ void choice_selection() {
 		matrix2 = matrices.second;
         
 		cout<< "Matrix 1: \n";
-		cout<< matrix1.grid[0][0] << matrix1.grid[0][1];
+		matrix1.print_grid();
+		cout<< "\n";
+		cout<< "Matrix 2: \n";
+		matrix2.print_grid();
 		break;
 	}
 	case 2:
@@ -304,6 +312,8 @@ void choice_selection() {
 		matrix1 = matrices.first;
 		matrix2 = matrices.second;
 		result = add_matrices(matrix1,matrix2);
+		cout<<"Result: \n";
+		result.print_grid();
 		break;
 	}
 
