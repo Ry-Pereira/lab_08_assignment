@@ -1,9 +1,9 @@
-//Program Name: Problem 1: Football Score Possibilities
-//Brief Description: This program produces all possible combinations of scoring plays given by a NFL score from the user. The program keeps going until the player puts in a input of 0 or 1.
-//Input: The input is a valid intger value from the user.
-//Ouput: The ouput will be all possible combinations of scorinh plays as long as the NFL score input is not 0 or 1. If the input is 0 or 1, the progrma will ends as result.
+//Program Name: Problem 8: Matrix Function and Operations Program
+//Brief Description: This program will ask the user for a matrix text fiel and options choice for adding or multiplying matrices, finding the sum diagonal, swapping rows and columsn,a dn updating the matrix at row by cloumn locaiton.
+//Input: The input is a matrix text fileeither 1 nxn matrix or 2 nxn matrix with matrix sizes at the top to indicate the size of the matrix or matrices. A choice input will be put int to ask the user what Matrix funcion or operation needs to be executed based on their liking.
+//Ouput: The ouput will welcome the user and give a goodbye message to the user. Print a menu to the user. Print result matrices based on the choice, that they ask. The hcoice ouptu will dicatte what Matrix function or operation needs to executed.
 //All collaborators: None
-//Other Sources:Github Copilot and ChatGPT BroCode from Youtube, Stack Overflow, and GeekforGeeks
+//Other Sources:Github Copilot and ChatGPT 
 //Author: Ryan Antony Pereira
 //Creation Date: 3/26/2025
 //Last Modified Date: 4/1/2025
@@ -14,10 +14,11 @@
 #include <fstream>
 //Includes the C++ string library for string manipulation and implmentation
 #include <string>
-#include <cmath>
 //Includes the C++ sstream library for file string parsing functionality
 #include <sstream>
+//Includes the C++ vector library for array manipulation and implementation
 #include <vector>
+//Using standard namespace to avoid using std:: prefix
 using namespace std;
 
 
@@ -94,7 +95,7 @@ pair<Matrix,Matrix> create_matrices(string matrix_text_file) {
 
 	//Opens the matrix text file in the matrix file ifstream object for reading and extracting information
 	ifstream matrix_file(matrix_text_file);
-	//The matrix file is openeded
+	//The matrix file is opened
 	if (matrix_file.is_open()) {
 	
 		//Continously goes through line by line in matrix file until there are no more lines to read
@@ -174,158 +175,236 @@ pair<Matrix,Matrix> create_matrices(string matrix_text_file) {
 
 
 Matrix create_matrice(string matrix_text_file) {
+	//Declares string line to hol line of file
 	string line;
-	int n = 1;
-	int m= -1;
-	int j = 0;
+	//Declares and initializes integer line number to 1 to keep track of the number of line there are
+	int line_number = 1;
+	//Declares and initializes integer current row to -1 to keep track of the placment of rows to matrices
+	int current_row=-1;
+	//Declares integer size of matrix to hold matrix size
 	int size_of_matrix;
+	//Matrix object matrix 1 is declared and initialized with with a 0,0 pair passed in to indicate the vector grid is 0,0 in size
 	Matrix matrix1(0,0);
 
-	ifstream myfile(matrix_text_file);
-	if (myfile.is_open()) {
-	
-		while (getline(myfile,line)) {
+	//Opens the matrix text file in the matrix file ifstream object for reading and extracting information
+	ifstream matrix_file(matrix_text_file);
+	//The matrix file is opened
+	if (matrix_file.is_open()) {
+		//Continously goes through line by line in matrix file until there are no more lines to read
+		while (getline(matrix_file,line)) {
+			//If the line is not empty and the back of it contains a newline character, it removes it
 			if(!line.empty() && line.back() == '\n') {
 				//Removes the newline character at the end of the line
 				line.pop_back();
 			}
-			if(n ==1) {
+			//If line number is 1, the matrix size number is there
+			if(line_number ==1) {
+				//Declares and intializes a stringstream object for parsing of the line
 				std::stringstream ss(line);
+				//Extracts the matrix size form the stirng stream object for storing in size of matrix
 				ss >> size_of_matrix;
+				//Declares and initializes rows to size of matrix
 				int rows = size_of_matrix;
+				//Declares and initializes columns to size of matrix
 				int columns = size_of_matrix;
+				//Declares and initializes matrix1 to Matrix object with rows and columns passed in
 				matrix1 = Matrix(rows,columns);
-
 			}
+			//Current row is not less than size of matrix, means the nex matrix needs to be stored with elements
 			else {
+				//Declares and intializes a stringstream object for parsing of the line
 				std::stringstream ss(line);
-				string s;
+				//Declares string cell element
+				string cell_element;
+				//Checks if line is not empty with the line size
 				if(line.size()-1) {
-					if(m < size_of_matrix) {
-						for(int i = 0; i<size_of_matrix; i++) {
-							std::getline(ss,s,' ');
-							int value = stoi(s);
-							matrix1.store_value(m,i,value);
-							
+					//If current row is within bound of size of matrix
+					if(current_row < size_of_matrix) {
+						//For in loop to iterate through each column
+						for(int column = 0; column<size_of_matrix; column++) {
+							////Gets the cell element until hitting a empty space and stores it in cell element
+							std::getline(ss,cell_element,' ');
+							//Declares and initializes cell element convert to integer
+							int value = stoi(cell_element);
+							//matrix 1 object executes the store value function with current row and colum with value passed in to store that value in the row by colum ni grid of matrix1
+							matrix1.store_value(current_row,column,value);
 						}
 					}
 				}
-				m++;
+				//Current row is incremented
+				current_row++;
 			}
-			n++;
+			//Line number is incremented
+			line_number++;
 		}
 	}
-	
-	myfile.close();
+	//Matrix file is closed
+	matrrix_file.close();
+	//Returns matrix 1 object
 	return matrix1;
 }
 
+//Function that return a result matrix of a product of addition of two matrices, being the matrix 1 and 2 Matrix object input
 Matrix add_matrices(Matrix matrix_1,Matrix matrix_2) {
+	//Matrix object result matrix is declared and initializes with matrix 1 number of rows and columsn passed in to resize it
 	Matrix result_matrix(matrix_1.number_of_rows,matrix_1.number_of_columns);
-
+	//For in loop to iterate through each row in matrix 1
 	for(int row=0; row<matrix_1.number_of_rows; row++) {
+		//For in loop to iterate through each column in matrix 1
 		for(int column = 0; column < matrix_1.number_of_columns; column++) {
+			//Integer value declared and initialzied to the prouduct of matri1 plus matrix 2 at the same location of row by column
 			int value = matrix_1.grid[row][column] + matrix_2.grid[row][column];
+			//Result matrix object executes the store value method with row,column,value passed in as argument
 			result_matrix.store_value(row,column,value);
 		}
 	}
-    cout<<"hello";
-    cout<<"Out"<< result_matrix.grid[0][0] << "\n";
-    
+	//Returns the result matrix object
 	return result_matrix;
 }
 
+//Function that return a result matrix of a product of multiplication of two matrices, being the matrix 1 and 2 Matrix object input
 Matrix multiply_matrices(Matrix matrix_1,Matrix matrix_2) {
+	//Matrix object result matrix is declared and initializes with matrix 1 number of rows and columsn passed in to resize it
 	Matrix result_matrix{matrix_1.number_of_rows,matrix_1.number_of_columns};
-
+	//For in loop to iterate through each row in matrix 1
 	for(int row=0; row<matrix_1.number_of_rows; row++) {
+		//For in loop to iterate through each column in matrix 1
 		for(int column = 0; column < matrix_1.number_of_columns; column++) {
+			//Integer value is declared and initialized to 0
 		    int value = 0;
-			for(int colu = 0; colu < matrix_2.number_of_columns; colu++) {
-				value += matrix_1.grid[row][colu] * matrix_2.grid[colu][column];
+			//For in loop to iterate thorugh ech column in matrix 2
+			for(int column_2 = 0; column_2 < matrix_2.number_of_columns; column_2++) {
+				//Value is incremented by multiplication product of matrix 1 at row by column in grid times the matrix2 grid at column2 by column
+				value += matrix_1.grid[row][column_2] * matrix_2.grid[column_2][column];
+				//Result matrix object executes the store value method with row,column,value passed in as argument
 				result_matrix.store_value(row,column,value);
 			}
 		}
 	}
+	//Returns the result matrix object
 	return result_matrix;
 }
 
+//Function that returns nothing, calculates the sumd idgaonal of the main and secondary digaonal of the matrix
 void sum_diagonal(Matrix matrix_1) {
-   
-	int d = 0;
+	//Declare and initializes column number to 0
+	int column_number = 0;
+	//Declares and initializes matrix 1 result main sum to 0
 	int matrix_1_result_main_sum = 0;
+	//Declares and initializes matrix 1 result secondary sum to 0
 	int matrix_1_result_secondary_sum = 0;
 
+	//For in loop to iterate through each row n matrix 1 number of rows
 	for(int row = 0; row < matrix_1.number_of_rows; row++) {
-		matrix_1_result_main_sum+= matrix_1.grid[row][d];
+		//Matrix 1 result main sum is incremeneted by the value at matrix 1 gird at location row  by column number
+		matrix_1_result_main_sum+= matrix_1.grid[row][column_number];
+		//Column number is incremented
+		column_number++;
+	}
 
-		d++;
-	}
-	d = matrix_1.number_of_columns-1;
+	//Column number is set to matrix 1 number of columns minus by 1
+	column_number = matrix_1.number_of_columns-1;
+	//For in loop to iterate through each row n matrix 1 number of rows
 	for(int row = 0; row < matrix_1.number_of_rows; row++) {
-		matrix_1_result_secondary_sum+= matrix_1.grid[row][d];
-		
-		d--;
+		//Matrix 1 result main sum is incremeneted by the value at matrix 1 gird at location row  by column number
+		matrix_1_result_secondary_sum+= matrix_1.grid[row][column_number];
+		//Column number is decremented
+		column_number--;
 	}
+	//Prints ouput to terminal the Matrix main diagonal sum 
 	cout<<"Matrix Main Diagonal Sum " << matrix_1_result_main_sum << "\n";
+	//Prints ouput to terminal the Matrix secondary diagonal sum 
 	cout<<"Matrix Secondary Diagonal Sum"<< matrix_1_result_secondary_sum << "\n";
-
-
 }
 
+//Function that return a matrix with its rows swapped, takes in a matrix object, integer row num 1 and 2 as input
 Matrix swap_rows(Matrix matrix_1,int row_num_1,int row_num_2) {
+	//Matrix result matrix object is set to the matrix 1 object
 	Matrix result_matrix = matrix_1;
 
+
+	//If row num 1 is greater than matrix 1 number of rows, it is out of bounds
 	if(row_num_1> matrix_1.number_of_rows) {
+		//Returns result matrix object
 		return result_matrix;
 	}
+	//If row num 2 is greater than matrix 1 number of rows, it is out of bounds
 	else if(row_num_2> matrix_1.number_of_rows) {
+		//Returns result matrix object
 		return result_matrix;
 	}
+	//If row num 1 is lesser than 0, it is out of bounds
 	else if(row_num_1 < 0) {
+		//Returns result matrix object
 		return result_matrix;
 	}
+	//If row num 2 is lesser than 0, it is out of bounds
 	else if(row_num_2 < 0) {
+		//Returns result matrix object
 		return result_matrix;
 	}
+	//If rows are in bounds, swapping can be done for the rows
 	else {
-		for(int col = 0; col< matrix_1.number_of_rows; col++) {
-			int value = matrix_1.grid[row_num_2][col];
-			result_matrix.store_value(row_num_1,col,value);
+		//For in loop to iterate through each column
+		for(int column = 0; col< matrix_1.number_of_columns; col++) {
+			//Declare and initialize value to the matrix1 at grid lcoation row num2 by column
+			int value = matrix_1.grid[row_num_2][column];
+			//Result matrix stores the value at the row num1 location at column with the value to swap it
+			result_matrix.store_value(row_num_1,column,value);
 		}
-		for(int col = 0; col< matrix_1.number_of_rows; col++) {
-			int value = matrix_1.grid[row_num_1][col];
-			result_matrix.store_value(row_num_2,col,value);
+		//For in loop to iterate through each column
+		for(int column = 0; col< matrix_1.number_of_columns; col++) {
+			//Declare and initialize value to the matrix1 at grid lcoation row num1 by column
+			int value = matrix_1.grid[row_num_1][column];
+			//Result matrix stores the value at the row num2 location at column with the value to swap it
+			result_matrix.store_value(row_num_2,column,value);
 		}
+		//Returns the result matrix object with rows swapped
 		return result_matrix;
 	}
-
 }
-//Function that returns a matrix with its columns swapped 
+//Function that return a matrix with its rows swapped, takes in a matrix object, integer column num 1 and 2 as input
 Matrix swap_columns(Matrix matrix_1,int column_num_1,int column_num_2) {
+	//Matrix result matrix object is set to the matrix 1 object
 	Matrix result_matrix = matrix_1;
 
-	if(column_num_1> matrix_1.number_of_rows) {
+	//If column num 1 is greater than matrix 1 number of columns, its out of bounds
+	if(column_num_1> matrix_1.number_of_columns) {
+		//Returns result matrix
 		return result_matrix;
 	}
-	else if(column_num_2> matrix_1.number_of_rows) {
+	//If column num 2 is greater than matrix 1 number of columns, its out of bounds
+	else if(column_num_2> matrix_1.number_of_columns) {
+		//Returns result matrix
 		return result_matrix;
 	}
+	//If column num 1 lessser than 0, it is out of bounds
 	else if(column_num_1 < 0) {
+		//Returns result matrix
 		return result_matrix;
 	}
+	//If column num 2 lessser than 0, it is out of bounds
 	else if(column_num_2 < 0) {
+		//Returns result matrix
 		return result_matrix;
 	}
+	//If column number are in bound, swapping of columns can happen
 	else {
+		//For in loop to iterate through each row
 		for(int row = 0; row< matrix_1.number_of_rows; row++) {
+			//Declare and initialize value to the matrix1 at grid lcoation row by column num2
 			int value = matrix_1.grid[row][column_num_2];
+			//Result matrix stores the value at the row  location at column num 1 with the value to swap it
 			result_matrix.store_value(row,column_num_1,value);
 		}
+		//For in loop to iterate through each row
 		for(int row = 0; row< matrix_1.number_of_rows; row++) {
+			//Declare and initialize value to the matrix1 at grid lcoation row  by column num 1
 			int value = matrix_1.grid[row][column_num_1];
+			//Result matrix stores the value at the row  location at column num 2 with the value to swap it
 			result_matrix.store_value(row,column_num_2,value);
 		}
+		//Returns the result matrix object with columns swapped
 		return result_matrix;
 	}
 }
