@@ -546,8 +546,6 @@ void choice_selection() {
 		cin >> matrix_numbers_text_file_name;
 		//matrix stores result ouput of the executed function called create matrice with matrix numbers text filename passed in as argument
 		matrix = create_matrice(matrix_numbers_text_file_name);
-		//Result matrix object executes the print grid function
-		matrix.print_grid();
 		//Sum diagoanl function is executed with matrix input passed in as arugment to count up the main and secodnary sum diagonal
 		sum_diagonal(matrix);
 		//Break statement to get of switch case statement
@@ -567,6 +565,8 @@ void choice_selection() {
 		//Declares integer row2
 		int row2;
 		//Prints ouput to terminal to prompt the user for a Row 1 number to Swap
+
+		
 		cout<<"Enter Row 1 to Swap";
 		//Stores user input in row1
 		cin >> row1;
@@ -574,12 +574,20 @@ void choice_selection() {
 		cout<<"Enter Row 2 to Swap";
 		//Stores user input in row2
 		cin >> row2;
-		//Result matrix stores the updated matrix of result from the executed swap rows function with matrix,row1, and row2 passed in arguments, to swap the row valus
-		result_matrix = swap_rows(matrix,row1,row2);
-		//Result matrix object executes the print grid function
-		result_matrix.print_grid();
-		//Break statement to get out of switch case statement
-		break;
+
+		if(row1-1 < 0 || row1-1 > matrix.get_number_of_rows() || row2-1 < 0 || row2-1 > matrix.get_number_of_rows() ){
+			cout<<"Row number is out of bounds";
+			break;
+		}
+		
+		else{
+    		//Result matrix stores the updated matrix of result from the executed swap rows function with matrix,row1, and row2 passed in arguments, to swap the row valus
+    		result_matrix = swap_rows(matrix,row1-1,row2-1);
+    		//Result matrix object executes the print grid function
+    		result_matrix.print_grid();
+    		//Break statement to get out of switch case statement
+    		break;
+		}
 	}
 	//If choice case is integer 6, Choice 6 is executed for a given matrix to swap column values, and be printed to terminal
 	case 6:
@@ -602,12 +610,18 @@ void choice_selection() {
 		cout<<"Enter Column 2 to Swap";
 		//Stores user input in column2
 		cin >> column2;
-		//Result matrix stores the updated matrix of result from the executed swap columns function with matrix,column1, and column2 passed in arguments, to swap the column valus
-		result_matrix = swap_columns(matrix,column1,column2);
-		//Result matrix object executes the print grid function
-		result_matrix.print_grid();
-		//Break statement to get out of switch case statement
-		break;
+		if(column1-1 < 0 || column1-1 > matrix.get_number_of_columns() || column2-1 < 0 || column2-1 > matrix.get_number_of_columns() ){
+			cout<<"Column number is out of bounds";
+			break;
+		}
+		else{
+			//Result matrix stores the updated matrix of result from the executed swap columns function with matrix,column1, and column2 passed in arguments, to swap the column valus
+			result_matrix = swap_columns(matrix,column1-1,column2-1);
+			//Result matrix object executes the print grid function
+			result_matrix.print_grid();
+			//Break statement to get out of switch case statement
+			break;
+		}
 	}
 	//If choice case is integer 7, Choice 7 is executed for a given matrix to be given a updated value at the row by column location
 	case 7:
@@ -619,33 +633,50 @@ void choice_selection() {
 		//matrix stores result ouput of the executed function called create matrice with matrix numbers text filename passed in as argument
 		matrix = create_matrice(matrix_numbers_text_file_name);
 		//Declares integer column
-		int column;
+		int column1;
 		//Declares integer row
-		int row;
+		int row1;
 		//Declares integer value
 		int value;
 		//Prints ouput to terminal to prompt the user for a row number
 		cout<<"Enter Row Number: ";
 		//Stores user input into row
-		cin>>row;
+		cin>>row1;
 		//Prints ouput to terminal to prompt the user for a column number
 		cout<<"Enter Column Number: ";
 		//Stores user input into column
-		cin>>column;
+		cin>>column1;
 		//Prints ouput to terminal to prompt the user for a value to be stored in the matrix at location row by column
 		cout<<"Enter Value to be stores: ";
 		//Stores the user input into value
 		cin>>value;
-		//Result matrix stores the updated matrix result from the update matrix function with matrix,row,column, and value input. The matrix is updated with the value stored in the grid at row by cloumn location
-		result_matrix = update_matrix(matrix,row,column,value);
-		//Result matrix object executes the print grid function
-		result_matrix.print_grid();
-		//Break statement to get out of switch case statement
-		break;
+
+		if(column1-1 < 0 || column1-1 > matrix.get_number_of_columns() ){
+			cout<<"Column number is out of bounds";
+			break;
+		}
+		if(row1-1 < 0 || row1-1 > matrix.get_number_of_rows() ){
+			cout<<"Row number is out of bounds";
+			break;
+		}
+		else{
+			//Result matrix stores the updated matrix result from the update matrix function with matrix,row,column, and value input. The matrix is updated with the value stored in the grid at row by cloumn location
+			result_matrix = update_matrix(matrix,row1-1,column1-1,value);
+			//Result matrix object executes the print grid function
+			result_matrix.print_grid();
+			//Break statement to get out of switch case statement
+			break;
+		}
+	}
+	//In case if all cases fail, default case is executed
+	default:
+	{
+		//Prints output to terminal that there choice is invalid
+		cout<<"Invalid Choice" << "\n";
 	}
 
-	}
-
+	
+}
 }
 
 //This function is the main entry point into the program itself
@@ -659,6 +690,8 @@ int main()
 	cout<< "\n";
 	//Executes the choice selection function that asks the user what choice they want and will execute that Matrix operation choice
 	choice_selection();
+	//Prints output to terminal that the program has ended
+	cout<<"Progam has ended...Goodbye";
 	//Returns 0 to indicate to the user that program has ended without issue
 	return 0;
 }
