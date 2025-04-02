@@ -35,6 +35,18 @@ private:
 
 	//The public section, where the functions can be accessed outside of class
 	public:
+	
+	int get_number_of_rows(){
+	    return number_of_rows;
+	}
+	int get_number_of_columns(){
+	    return number_of_rows;
+	}
+	int get_grid_value(int row, int column){
+		return grid[row][column];
+	}
+	
+	
 	//Constructor for Matrix object that takes in a integer rows and columsn paramter arguments for initialization
 	Matrix(int rows, int columns) {
 		//Assigns number of rows to integer rows paramter argument
@@ -55,14 +67,14 @@ private:
 		//Prints to terminal the column numbers
 	    cout<< "Column ";
 		//For in loop to iterate through eaach column and print a number to indicate position of cell
-	    for(int column = 0; column < number_of_columns+1; column++){
+	    for(int column = 1; column < number_of_columns+1; column++){
 			////Prints to terminal ouput a | to indicate a barrier spacing
 	        cout<< column << "|";
 	    }
 		//Prints newline spacing
 	    cout<<"\n";
 		//For in loop to iterate throguh each row
-		for(int row= 1; row<number_of_rows; row++) {
+		for(int row= 0; row<number_of_rows; row++) {
 			//Pritns to terminal ouput the Row and number wiht a | to indicate barreier spacing and cell location
 	        cout<< "Row "<<row << "| ";
 			//For in loop to iterate through each columns
@@ -239,7 +251,7 @@ Matrix create_matrice(string matrix_text_file) {
 		}
 	}
 	//Matrix file is closed
-	matrrix_file.close();
+	matrix_file.close();
 	//Returns matrix 1 object
 	return matrix1;
 }
@@ -247,13 +259,13 @@ Matrix create_matrice(string matrix_text_file) {
 //Function that return a result matrix of a product of addition of two matrices, being the matrix 1 and 2 Matrix object input
 Matrix add_matrices(Matrix matrix_1,Matrix matrix_2) {
 	//Matrix object result matrix is declared and initializes with matrix 1 number of rows and columsn passed in to resize it
-	Matrix result_matrix(matrix_1.number_of_rows,matrix_1.number_of_columns);
+	Matrix result_matrix(matrix_1.get_number_of_rows(),matrix_1.get_number_of_columns());
 	//For in loop to iterate through each row in matrix 1
-	for(int row=0; row<matrix_1.number_of_rows; row++) {
+	for(int row=0; row<matrix_1.get_number_of_rows(); row++) {
 		//For in loop to iterate through each column in matrix 1
-		for(int column = 0; column < matrix_1.number_of_columns; column++) {
+		for(int column = 0; column < matrix_1.get_number_of_columns(); column++) {
 			//Integer value declared and initialzied to the prouduct of matri1 plus matrix 2 at the same location of row by column
-			int value = matrix_1.grid[row][column] + matrix_2.grid[row][column];
+			int value = matrix_1.get_grid_value(row,column) + matrix_2.get_grid_value(row,column);
 			//Result matrix object executes the store value method with row,column,value passed in as argument
 			result_matrix.store_value(row,column,value);
 		}
@@ -265,17 +277,17 @@ Matrix add_matrices(Matrix matrix_1,Matrix matrix_2) {
 //Function that return a result matrix of a product of multiplication of two matrices, being the matrix 1 and 2 Matrix object input
 Matrix multiply_matrices(Matrix matrix_1,Matrix matrix_2) {
 	//Matrix object result matrix is declared and initializes with matrix 1 number of rows and columsn passed in to resize it
-	Matrix result_matrix{matrix_1.number_of_rows,matrix_1.number_of_columns};
+	Matrix result_matrix{matrix_1.get_number_of_rows(),matrix_1.get_number_of_columns()};
 	//For in loop to iterate through each row in matrix 1
-	for(int row=0; row<matrix_1.number_of_rows; row++) {
+	for(int row=0; row<matrix_1.get_number_of_rows(); row++) {
 		//For in loop to iterate through each column in matrix 1
-		for(int column = 0; column < matrix_1.number_of_columns; column++) {
+		for(int column = 0; column < matrix_1.get_number_of_columns(); column++) {
 			//Integer value is declared and initialized to 0
 		    int value = 0;
 			//For in loop to iterate thorugh ech column in matrix 2
-			for(int column_2 = 0; column_2 < matrix_2.number_of_columns; column_2++) {
+			for(int column_2 = 0; column_2 < matrix_2.get_number_of_columns(); column_2++) {
 				//Value is incremented by multiplication product of matrix 1 at row by column in grid times the matrix2 grid at column2 by column
-				value += matrix_1.grid[row][column_2] * matrix_2.grid[column_2][column];
+				value += matrix_1.get_grid_value(row,column_2) * matrix_2.get_grid_value(column_2,column);
 				//Result matrix object executes the store value method with row,column,value passed in as argument
 				result_matrix.store_value(row,column,value);
 			}
@@ -295,19 +307,19 @@ void sum_diagonal(Matrix matrix_1) {
 	int matrix_1_result_secondary_sum = 0;
 
 	//For in loop to iterate through each row n matrix 1 number of rows
-	for(int row = 0; row < matrix_1.number_of_rows; row++) {
+	for(int row = 0; row < matrix_1.get_number_of_rows(); row++) {
 		//Matrix 1 result main sum is incremeneted by the value at matrix 1 gird at location row  by column number
-		matrix_1_result_main_sum+= matrix_1.grid[row][column_number];
+		matrix_1_result_main_sum+= matrix_1.get_grid_value(row,column_number);
 		//Column number is incremented
 		column_number++;
 	}
 
 	//Column number is set to matrix 1 number of columns minus by 1
-	column_number = matrix_1.number_of_columns-1;
+	column_number = matrix_1.get_number_of_columns()-1;
 	//For in loop to iterate through each row n matrix 1 number of rows
-	for(int row = 0; row < matrix_1.number_of_rows; row++) {
+	for(int row = 0; row < matrix_1.get_number_of_rows(); row++) {
 		//Matrix 1 result main sum is incremeneted by the value at matrix 1 gird at location row  by column number
-		matrix_1_result_secondary_sum+= matrix_1.grid[row][column_number];
+		matrix_1_result_secondary_sum+= matrix_1.get_grid_value(row,column_number);
 		//Column number is decremented
 		column_number--;
 	}
@@ -324,12 +336,12 @@ Matrix swap_rows(Matrix matrix_1,int row_num_1,int row_num_2) {
 
 
 	//If row num 1 is greater than matrix 1 number of rows, it is out of bounds
-	if(row_num_1> matrix_1.number_of_rows) {
+	if(row_num_1> matrix_1.get_number_of_rows()) {
 		//Returns result matrix object
 		return result_matrix;
 	}
 	//If row num 2 is greater than matrix 1 number of rows, it is out of bounds
-	else if(row_num_2> matrix_1.number_of_rows) {
+	else if(row_num_2> matrix_1.get_number_of_rows()) {
 		//Returns result matrix object
 		return result_matrix;
 	}
@@ -346,16 +358,16 @@ Matrix swap_rows(Matrix matrix_1,int row_num_1,int row_num_2) {
 	//If rows are in bounds, swapping can be done for the rows
 	else {
 		//For in loop to iterate through each column
-		for(int column = 0; col< matrix_1.number_of_columns; col++) {
+		for(int column = 0; column< matrix_1.get_number_of_columns(); column++) {
 			//Declare and initialize value to the matrix1 at grid lcoation row num2 by column
-			int value = matrix_1.grid[row_num_2][column];
+			int value = matrix_1.get_grid_value(row_num_2,column);
 			//Result matrix stores the value at the row num1 location at column with the value to swap it
 			result_matrix.store_value(row_num_1,column,value);
 		}
 		//For in loop to iterate through each column
-		for(int column = 0; col< matrix_1.number_of_columns; col++) {
+		for(int column = 0; column< matrix_1.get_number_of_columns(); column++) {
 			//Declare and initialize value to the matrix1 at grid lcoation row num1 by column
-			int value = matrix_1.grid[row_num_1][column];
+			int value = matrix_1.get_grid_value(row_num_1,column);
 			//Result matrix stores the value at the row num2 location at column with the value to swap it
 			result_matrix.store_value(row_num_2,column,value);
 		}
@@ -369,12 +381,12 @@ Matrix swap_columns(Matrix matrix_1,int column_num_1,int column_num_2) {
 	Matrix result_matrix = matrix_1;
 
 	//If column num 1 is greater than matrix 1 number of columns, its out of bounds
-	if(column_num_1> matrix_1.number_of_columns) {
+	if(column_num_1> matrix_1.get_number_of_columns()) {
 		//Returns result matrix
 		return result_matrix;
 	}
 	//If column num 2 is greater than matrix 1 number of columns, its out of bounds
-	else if(column_num_2> matrix_1.number_of_columns) {
+	else if(column_num_2> matrix_1.get_number_of_columns()) {
 		//Returns result matrix
 		return result_matrix;
 	}
@@ -391,16 +403,16 @@ Matrix swap_columns(Matrix matrix_1,int column_num_1,int column_num_2) {
 	//If column number are in bound, swapping of columns can happen
 	else {
 		//For in loop to iterate through each row
-		for(int row = 0; row< matrix_1.number_of_rows; row++) {
+		for(int row = 0; row< matrix_1.get_number_of_rows(); row++) {
 			//Declare and initialize value to the matrix1 at grid lcoation row by column num2
-			int value = matrix_1.grid[row][column_num_2];
+			int value = matrix_1.get_grid_value(row,column_num_2);
 			//Result matrix stores the value at the row  location at column num 1 with the value to swap it
 			result_matrix.store_value(row,column_num_1,value);
 		}
 		//For in loop to iterate through each row
-		for(int row = 0; row< matrix_1.number_of_rows; row++) {
+		for(int row = 0; row< matrix_1.get_number_of_rows(); row++) {
 			//Declare and initialize value to the matrix1 at grid lcoation row  by column num 1
-			int value = matrix_1.grid[row][column_num_1];
+			int value = matrix_1.get_grid_value(row,column_num_1);
 			//Result matrix stores the value at the row  location at column num 2 with the value to swap it
 			result_matrix.store_value(row,column_num_2,value);
 		}
@@ -495,11 +507,11 @@ void choice_selection() {
 		//Matrix2 is set to the second of the matrices pair
 		matrix2 = matrices.second;
 		//Result matrix is a stores result matrix from the ouput of the executed add matrices function with matrix 1 and 2 passed in as argument
-		result = add_matrices(matrix1,matrix2);
+		result_matrix = add_matrices(matrix1,matrix2);
 		//Prints ouput to terminal the result output
 		cout<<"Result: \n";
 		//Result matrix object executes the print grid function
-		result.print_grid();
+		result_matrix.print_grid();
 		//Break statement to get of switch case statement
 		break;
 	}
