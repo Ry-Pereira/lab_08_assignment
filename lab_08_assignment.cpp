@@ -8,6 +8,8 @@
 //Creation Date: 3/26/2025
 //Last Modified Date: 4/1/2025
 
+//ChatGPT helped with debuggin, pointing out errors, helping me correct my code.
+
 //Includes the iostream library file to include standard input and ouput for cin and cout
 #include <iostream>
 //Includes the C++ fstream libary for file input and output, open and close functionality
@@ -22,6 +24,8 @@
 using namespace std;
 
 
+//ChatGPT helped me with the process of class construction. Suggested vectors for matrix construction
+
 //Defining a Matrix class object
 class Matrix {
 //The private section, where class memeber cannot be directly accessed by outside of class
@@ -33,16 +37,25 @@ private:
 	//Declares integer 2d vector grid to implement the matrix grid
 	vector<vector<int>> grid;
 
+
+	//ChatGPT helped me with the public function that can be be accessed, espicially the getter functions
+
 	//The public section, where the functions can be accessed outside of class
 	public:
 	
+	//Function to get number of rows
 	int get_number_of_rows(){
+		//Returns the number of rows
 	    return number_of_rows;
 	}
+	//Function to get number of columns
 	int get_number_of_columns(){
+		//Return the number of rows
 	    return number_of_rows;
 	}
+	//FUnction to get grid value with integer row and columns passed in as argument
 	int get_grid_value(int row, int column){
+		//Returns the grid value at row by column location
 		return grid[row][column];
 	}
 	
@@ -87,6 +100,8 @@ private:
 		}
 	}
 };
+
+//Chatgpt suggested withr returnng a pair of Matrix objects in order to return two matrices
 
 //Function to return a created pair of 2 nxn matrices with string matrix text file arument passed in
 pair<Matrix,Matrix> create_matrices(string matrix_text_file) {
@@ -256,6 +271,9 @@ Matrix create_matrice(string matrix_text_file) {
 	return matrix1;
 }
 
+
+//ChatGpt helped me with finnding how to add two matrices
+
 //Function that return a result matrix of a product of addition of two matrices, being the matrix 1 and 2 Matrix object input
 Matrix add_matrices(Matrix matrix_1,Matrix matrix_2) {
 	//Matrix object result matrix is declared and initializes with matrix 1 number of rows and columsn passed in to resize it
@@ -273,6 +291,9 @@ Matrix add_matrices(Matrix matrix_1,Matrix matrix_2) {
 	//Returns the result matrix object
 	return result_matrix;
 }
+
+
+//ChatGpt helped me with finnding how to multiply two matrices
 
 //Function that return a result matrix of a product of multiplication of two matrices, being the matrix 1 and 2 Matrix object input
 Matrix multiply_matrices(Matrix matrix_1,Matrix matrix_2) {
@@ -296,6 +317,8 @@ Matrix multiply_matrices(Matrix matrix_1,Matrix matrix_2) {
 	//Returns the result matrix object
 	return result_matrix;
 }
+
+//ChatGpt helped me with finnding the sum of the diagonals
 
 //Function that returns nothing, calculates the sumd idgaonal of the main and secondary digaonal of the matrix
 void sum_diagonal(Matrix matrix_1) {
@@ -328,6 +351,9 @@ void sum_diagonal(Matrix matrix_1) {
 	//Prints ouput to terminal the Matrix secondary diagonal sum 
 	cout<<"Matrix Secondary Diagonal Sum"<< matrix_1_result_secondary_sum << "\n";
 }
+
+
+//ChatGpt helped me with finnding how to swap two rows
 
 //Function that return a matrix with its rows swapped, takes in a matrix object, integer row num 1 and 2 as input
 Matrix swap_rows(Matrix matrix_1,int row_num_1,int row_num_2) {
@@ -375,6 +401,11 @@ Matrix swap_rows(Matrix matrix_1,int row_num_1,int row_num_2) {
 		return result_matrix;
 	}
 }
+
+
+
+//ChatGpt helped me with finnding how to swap columns 
+
 //Function that return a matrix with its rows swapped, takes in a matrix object, integer column num 1 and 2 as input
 Matrix swap_columns(Matrix matrix_1,int column_num_1,int column_num_2) {
 	//Matrix result matrix object is set to the matrix 1 object
@@ -446,6 +477,9 @@ void print_menu() {
 	//Prints output to terminal to prompt the user that choice 7 is for them to input a 1 nxn matrix text file to read and stores the matrix, and updates it by the users row,column, and value input and updates the matrix on that info, and prints out the reuslt matrix of that
 	cout<<"7: Update matrix  at row by column with new value and display the result" << "\n";
 }
+
+//Chatgpt helped with choice selection method.Suggested with declaring and initalizling matrixes to avoid error.
+
 //Choice selection, returns nothing, to indicate the user to make a choice on what matric operation choice to be done
 void choice_selection() {
 	//Declares integer choice
@@ -575,8 +609,11 @@ void choice_selection() {
 		//Stores user input in row2
 		cin >> row2;
 
+		//Checks to see if row1 and row2 is out of bounds
 		if(row1-1 < 0 || row1-1 > matrix.get_number_of_rows() || row2-1 < 0 || row2-1 > matrix.get_number_of_rows() ){
-			cout<<"Row number is out of bounds";
+			//Prints to terminal that the Row number is out of bounds
+			cout<<"Row number is out of bounds"<< "\n";
+			//Break out of switch case
 			break;
 		}
 		
@@ -610,8 +647,11 @@ void choice_selection() {
 		cout<<"Enter Column 2 to Swap";
 		//Stores user input in column2
 		cin >> column2;
+		//If column1 and column2 are out of bound of the number of columns
 		if(column1-1 < 0 || column1-1 > matrix.get_number_of_columns() || column2-1 < 0 || column2-1 > matrix.get_number_of_columns() ){
-			cout<<"Column number is out of bounds";
+			//Prints to termianl that the column is out of bounds
+			cout<<"Column number is out of bounds"<<"\n";
+			//Breaks out of switch statement
 			break;
 		}
 		else{
@@ -651,12 +691,18 @@ void choice_selection() {
 		//Stores the user input into value
 		cin>>value;
 
+		//Checks to see if the column is out of bounds
 		if(column1-1 < 0 || column1-1 > matrix.get_number_of_columns() ){
-			cout<<"Column number is out of bounds";
+			//Prints to the terminal that the column number is out of bounds
+			cout<<"Column number is out of bounds" << "\n";
+			//Breaks out of swicth statement
 			break;
 		}
+		//Checks to see if the row is out of bounds
 		if(row1-1 < 0 || row1-1 > matrix.get_number_of_rows() ){
-			cout<<"Row number is out of bounds";
+			//Prints to the terminal that the column number is out of bounds
+			cout<<"Row number is out of bounds" << "\n";
+			//Breaks out of swicth statement
 			break;
 		}
 		else{
