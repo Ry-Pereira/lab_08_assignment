@@ -505,7 +505,7 @@ void choice_selection() {
 	case 1:
 	{
 		//Prints ouput to terminal for the user to be prompted the Matrix Numbers Text File name
-		cout<<"Enter Matrix Numbers Text File Name: ";
+		cout<<"Enter 2 nxn Matrix Numbers Text File Name: ";
 		//Stores the user input into matrix numbers text file name
 		cin >> matrix_numbers_text_file_name;
 		//matrices pair stores result ouput of the executed function called create matrices with matrix numbers text filename passed in as argument this gives two matrixes
@@ -531,7 +531,7 @@ void choice_selection() {
 	case 2:
 	{
 		//Prints ouput to terminal for the user to be prompted the Matrix Numbers Text File name
-		cout<<"Enter Matrix Numbers Text File Name: ";
+		cout<<"Enter 2 nxn Matrix Numbers Text File Name: ";
 		//Stores the user input into matrix numbers text file name
 		cin >> matrix_numbers_text_file_name;
 		//matrices pair stores result ouput of the executed function called create matrices with matrix numbers text filename passed in as argument this gives two matrixes
@@ -553,7 +553,7 @@ void choice_selection() {
 	case 3:
 	{
 		//Prints ouput to terminal for the user to be prompted the Matrix Numbers Text File name
-		cout<<"Enter Matrix Numbers Text File Name: ";
+		cout<<"Enter 2 nxn Matrix Numbers Text File Name: ";
 		//Stores the user input into matrix numbers text file name
 		cin >> matrix_numbers_text_file_name;
 		//matrices pair stores result ouput of the executed function called create matrices with matrix numbers text filename passed in as argument this gives two matrixes
@@ -575,7 +575,7 @@ void choice_selection() {
 	case 4:
 	{
 		//Prints ouput to terminal for the user to be prompted the Matrix Numbers Text File name
-		cout<<"Enter Matrix Numbers Text File Name: ";
+		cout<<"Enter Single nxn Matrix Numbers Text File Name: ";
 		//Stores the user input into matrix numbers text file name
 		cin >> matrix_numbers_text_file_name;
 		//matrix stores result ouput of the executed function called create matrice with matrix numbers text filename passed in as argument
@@ -589,7 +589,7 @@ void choice_selection() {
 	case 5:
 	{
 		//Prints ouput to terminal for the user to be prompted the Matrix Numbers Text File name
-		cout<<"Enter Matrix Numbers Text File Name: ";
+		cout<<"Enter Single nxn Matrix Numbers Text File Name: ";
 		//Stores the user input into matrix numbers text file name
 		cin >> matrix_numbers_text_file_name;
 		//matrix stores result ouput of the executed function called create matrice with matrix numbers text filename passed in as argument
@@ -630,7 +630,7 @@ void choice_selection() {
 	case 6:
 	{
 		//Prints ouput to terminal for the user to be prompted the Matrix Numbers Text File name
-		cout<<"Enter Matrix Numbers Text File Name: ";
+		cout<<"Enter Single nxn Matrix Numbers Text File Name: ";
 		//Stores the user input into matrix numbers text file name
 		cin >> matrix_numbers_text_file_name;
 		//matrix stores result ouput of the executed function called create matrice with matrix numbers text filename passed in as argument
@@ -667,7 +667,7 @@ void choice_selection() {
 	case 7:
 	{
 		//Prints ouput to terminal for the user to be prompted the Matrix Numbers Text File name
-		cout<<"Enter Matrix Numbers Text File Name: ";
+		cout<<"Enter Single nxn Matrix Numbers Text File Name: ";
 		//Stores the user input into matrix numbers text file name
 		cin >> matrix_numbers_text_file_name;
 		//matrix stores result ouput of the executed function called create matrice with matrix numbers text filename passed in as argument
