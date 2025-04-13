@@ -101,14 +101,60 @@ private:
 	}
 };
 
+
+int is_number(int number){
+	if(1 >= number && number <=9){
+		string result = "0" + to_string(number);
+
+	}
+}
+
+
+
+
 //Chatgpt suggested withr returnng a pair of Matrix objects in order to return two matrices
+
+bool file_check(int matrices_produced,string text_file){
+    int size_of_matrix;
+    ifstream matrix_file(text_file);
+    int rows_size = 0;
+    int amount_of_rows = 0;
+    string line;
+    int linr_number = 0;
+    string elem;
+    bool got_matrix_size = false;
+    
+    if(!matrix_file.is_open()){
+        return false;
+    }
+	while (getline(matrix_file,line)) {
+	   stringstream ss(line);
+	   string elem;
+	   if(line.size()got_matrix_size == false){
+	       ss>> size_of_matrix;
+	       got_matrix_size == true
+	   }
+	   if(got_matrix_size == true){
+	       int i = 0;
+    	   while(ss>> elem){
+    	       i++;
+    	       cout<<elem<<"\n";
+	       }    
+	   }
+	}
+}
+
+
+
+
+
 
 //Function to return a created pair of 2 nxn matrices with string matrix text file arument passed in
 pair<Matrix,Matrix> create_matrices(string matrix_text_file) {
 	//Declares string line to hol line of file
 	string line;
 	//Declares and initializes integer line number to 1 to keep track of the number of line there are
-	int line_number = 1;
+	int line_number = 0;
 	//Declares and initializes integer current row to -1 to keep track of the placment of rows to matrices
 	int current_row=-1;
 	//Declares and initializes integer current matrix 2 row to 0, to keep track of the placmeent of matrix 2 rows
@@ -119,99 +165,7 @@ pair<Matrix,Matrix> create_matrices(string matrix_text_file) {
 	Matrix matrix1(0,0);
 	//Matrix object matrix 2 is declared and initialized with with a 0,0 pair passed in to indicate the vector grid is 0,0 in size
 	Matrix matrix2(0,0);
-
-	//Opens the matrix text file in the matrix file ifstream object for reading and extracting information
-	ifstream matrix_file(matrix_text_file);
-	//The matrix file is opened
-	if (matrix_file.is_open()) {
-	
-		//Continously goes through line by line in matrix file until there are no more lines to read
-		while (getline(matrix_file,line)) {
-			//If the line is not empty and the back of it contains a newline character, it removes it
-			if(!line.empty() && line.back() == '\n') {
-				//Removes the newline character at the end of the line
-				line.pop_back();
-			}
-			//If line number is 1, the matrix size number is there
-			if(line_number ==1) {
-				//Declares and intializes a stringstream object for parsing of the line
-				std::stringstream ss(line);
-				//Extracts the matrix size form the stirng stream object for storing in size of matrix
-				ss >> size_of_matrix;
-				//Declares and initializes rows to size of matrix
-				int rows = size_of_matrix;
-				//Declares and initializes columns to size of matrix
-				int columns = size_of_matrix;
-				//Declares and initializes matrix1 to Matrix object with rows and columns passed in
-				matrix1 = Matrix(rows,columns);
-				//Declares and initializes matrix2 to Matrix object with rows and columns passed in
-				matrix2 = Matrix(rows,columns);
-			}
-			//If the line number is not 1, then the rest of the lines are Matrix numbers to be stored
-			else {
-				//Declares and intializes a stringstream object for parsing of the line
-				std::stringstream ss(line);
-				//Declares string cell element
-				string cell_element;
-				//Checks if line is not empty with the line size
-				if(line.size()-1) {
-					//If current row is within bound of size of matrix
-					if(current_row < size_of_matrix) {
-						//For in loop to iterate through each column 
-						for(int column = 0; column<size_of_matrix; column++) {
-							//Gets the cell element until hitting a empty space and stores it in cell element
-							std::getline(ss,cell_element,' ');
-							//Declares and initializes cell element convert to integer
-							int value = stoi(cell_element);
-							//matrix 1 object executes the store value function with current row and colum with value passed in to store that value in the row by colum ni grid of matrix1
-							matrix1.store_value(current_row,column,value);
-						}
-						//If the current row is equal to size of matrix, the next matrix is to be stored with the other elements
-						if(current_row == size_of_matrix) {
-							//Initialzies current matrix 2 row to 0
-							current_matrix_2_row = 0;
-						}
-					}
-					//Current row is not less than size of matrix, means the nex matrix needs to be stored with elements
-					else {
-						//For in loop to iterate through each column
-						for(int column = 0; column<size_of_matrix; column++) {
-							////Gets the cell element until hitting a empty space and stores it in cell element
-							std::getline(ss,cell_element,' ');
-							//Declares and initializes cell element convert to integer
-							int value = stoi(cell_element);
-							//matrix 2 object executes the store value function with current matrix 2 row and colum with value passed in to store that value in the row by colum ni grid of matrix2
-							matrix2.store_value(current_matrix_2_row ,column,value);
-						}
-						//current matrix 2 row is incremented
-						current_matrix_2_row ++;
-					}
-				}
-				//Current row is incremented
-				current_row++;
-			}
-			//Line number is incremented
-			line_number++;
-		}
-	}
-	//Matrix file is closed
-	matrix_file.close();
-	//Returns the pair with amtrix 1 and 2 in it
-	return {matrix1,matrix2};
-}
-
-
-Matrix create_matrice(string matrix_text_file) {
-	//Declares string line to hol line of file
-	string line;
-	//Declares and initializes integer line number to 1 to keep track of the number of line there are
-	int line_number = 1;
-	//Declares and initializes integer current row to -1 to keep track of the placment of rows to matrices
-	int current_row=-1;
-	//Declares integer size of matrix to hold matrix size
-	int size_of_matrix;
-	//Matrix object matrix 1 is declared and initialized with with a 0,0 pair passed in to indicate the vector grid is 0,0 in size
-	Matrix matrix1(0,0);
+	bool got_matrix_size = false;
 
 	//Opens the matrix text file in the matrix file ifstream object for reading and extracting information
 	ifstream matrix_file(matrix_text_file);
@@ -219,56 +173,42 @@ Matrix create_matrice(string matrix_text_file) {
 	if (matrix_file.is_open()) {
 		//Continously goes through line by line in matrix file until there are no more lines to read
 		while (getline(matrix_file,line)) {
-			//If the line is not empty and the back of it contains a newline character, it removes it
-			if(!line.empty() && line.back() == '\n') {
-				//Removes the newline character at the end of the line
-				line.pop_back();
-			}
-			//If line number is 1, the matrix size number is there
-			if(line_number ==1) {
-				//Declares and intializes a stringstream object for parsing of the line
+		    if(line.size()-1 != 0){
+		        //Declares and intializes a stringstream object for parsing of the line
 				std::stringstream ss(line);
-				//Extracts the matrix size form the stirng stream object for storing in size of matrix
-				ss >> size_of_matrix;
-				//Declares and initializes rows to size of matrix
-				int rows = size_of_matrix;
-				//Declares and initializes columns to size of matrix
-				int columns = size_of_matrix;
-				//Declares and initializes matrix1 to Matrix object with rows and columns passed in
-				matrix1 = Matrix(rows,columns);
-			}
-			//Current row is not less than size of matrix, means the nex matrix needs to be stored with elements
-			else {
-				//Declares and intializes a stringstream object for parsing of the line
-				std::stringstream ss(line);
-				//Declares string cell element
-				string cell_element;
-				//Checks if line is not empty with the line size
-				if(line.size()-1) {
-					//If current row is within bound of size of matrix
-					if(current_row < size_of_matrix) {
-						//For in loop to iterate through each column
-						for(int column = 0; column<size_of_matrix; column++) {
-							////Gets the cell element until hitting a empty space and stores it in cell element
-							std::getline(ss,cell_element,' ');
-							//Declares and initializes cell element convert to integer
-							int value = stoi(cell_element);
-							//matrix 1 object executes the store value function with current row and colum with value passed in to store that value in the row by colum ni grid of matrix1
-							matrix1.store_value(current_row,column,value);
-						}
-					}
-				}
-				//Current row is incremented
-				current_row++;
-			}
-			//Line number is incremented
-			line_number++;
+		        if(got_matrix_size == false){
+		            std::stringstream ss(line);
+        			//Extracts the matrix size form the stirng stream object for storing in size of matrix
+        			ss >> size_of_matrix;
+        			//Declares and initializes matrix1 to Matrix object with rows and columns passed in
+        			matrix1 = Matrix(size_of_matrix,size_of_matrix);
+        			matrix2 = Matrix(size_of_matrix,size_of_matrix);
+        			got_matrix_size = true;
+		        }
+		        else{
+		            std::stringstream ss(line);
+		            string cell_element = "";
+		            for(int column = 0; column< size_of_matrix; column++){
+		                getline(ss,cell_element,' ');
+		                cout<<"bot: "<<cell_element<<"\n";
+		                int value = stoi(cell_element);
+		                if(line_number < size_of_matrix){
+		                    matrix1.store_value(line_number,column,value);
+		                }
+		                else{
+		                    matrix2.store_value(line_number-size_of_matrix,column,value);
+		                   
+		                    
+		                }
+		                
+		            }
+		            line_number++;
+		        }
+		        
+		    }
 		}
 	}
-	//Matrix file is closed
-	matrix_file.close();
-	//Returns matrix 1 object
-	return matrix1;
+    return {matrix1,matrix2};
 }
 
 
@@ -508,6 +448,8 @@ void choice_selection() {
 		cout<<"Enter 2 nxn Matrix Numbers Text File Name: ";
 		//Stores the user input into matrix numbers text file name
 		cin >> matrix_numbers_text_file_name;
+		bool b = file_check(2,matrix_numbers_text_file_name);
+		cout<<"is valid"<<b<<"\n";
 		//matrices pair stores result ouput of the executed function called create matrices with matrix numbers text filename passed in as argument this gives two matrixes
 		pair<Matrix,Matrix> matrices = create_matrices(matrix_numbers_text_file_name);
 		//Matrix1 is set to the first of the matrices pair
@@ -579,9 +521,9 @@ void choice_selection() {
 		//Stores the user input into matrix numbers text file name
 		cin >> matrix_numbers_text_file_name;
 		//matrix stores result ouput of the executed function called create matrice with matrix numbers text filename passed in as argument
-		matrix = create_matrice(matrix_numbers_text_file_name);
+		pair<Matrix,Matrix> matrices = create_matrices(matrix_numbers_text_file_name);
 		//Sum diagoanl function is executed with matrix input passed in as arugment to count up the main and secodnary sum diagonal
-		sum_diagonal(matrix);
+		sum_diagonal(matrices.first);
 		//Break statement to get of switch case statement
 		break;
 	}
@@ -593,7 +535,7 @@ void choice_selection() {
 		//Stores the user input into matrix numbers text file name
 		cin >> matrix_numbers_text_file_name;
 		//matrix stores result ouput of the executed function called create matrice with matrix numbers text filename passed in as argument
-		matrix = create_matrice(matrix_numbers_text_file_name);
+		//pair<Matrix,Matrix> matrices = create_matrice(matrix_numbers_text_file_name);
 		//Declares integer row1
 		int row1;
 		//Declares integer row2
@@ -634,7 +576,7 @@ void choice_selection() {
 		//Stores the user input into matrix numbers text file name
 		cin >> matrix_numbers_text_file_name;
 		//matrix stores result ouput of the executed function called create matrice with matrix numbers text filename passed in as argument
-		matrix = create_matrice(matrix_numbers_text_file_name);
+		//matrix = create_matrice(matrix_numbers_text_file_name);
 		//Declares integer column1
 		int column1;
 		//Declares integer column2
@@ -671,7 +613,7 @@ void choice_selection() {
 		//Stores the user input into matrix numbers text file name
 		cin >> matrix_numbers_text_file_name;
 		//matrix stores result ouput of the executed function called create matrice with matrix numbers text filename passed in as argument
-		matrix = create_matrice(matrix_numbers_text_file_name);
+		//matrix = create_matrices(matrix_numbers_text_file_name);
 		//Declares integer column
 		int column1;
 		//Declares integer row
