@@ -20,8 +20,10 @@
 #include <sstream>
 //Includes the C++ vector library for array manipulation and implementation
 #include <vector>
-
+//Includes the C++ typeinfo library for checking the data type of data
 #include <typeinfo>
+
+//Include the C++ cmath library to do the absolut value of a integer value to be turned to positive
 //Using standard namespace to avoid using std:: prefix
 using namespace std;
 
@@ -95,11 +97,18 @@ private:
 			//For in loop to iterate through each columns
 			for(int column = 0; column < number_of_columns; column++) {
 				//Prints to terminal ouput the value at grid of row by column location witha  space
-				if(grid[row][column] < 10){
-				    string num = "0" + to_string(grid[row][column]);
-				    cout<<num<< " ";
+				if(grid[row][column] < 10 && grid[row][column] >= 0){
+					//Declares string num to the concatenation product of 0 and string converted of the grid at row by column
+				    string formmated_number = "0" + to_string(grid[row][column]);
+				    cout<<formmated_number << " ";
 				}
+				else if(grid[row][column] < 0 && grid[row][column] > -10){
+					string formmated_number = "-0" + to_string(abs(grid[row][column]));
+				    cout<<formmated_number << " ";
+				}
+				
 				else{
+				//Prints to terminal ouput the value at grid of row by column location witha  space
 				cout<<grid[row][column]<< " ";
 				}
 			}
@@ -162,8 +171,6 @@ bool file_check(int matrices_produced,string text_file){
 	       cout<<"\n";
 	   }
 	   }
-	   cout<<matrices_produced<<"\n";
-	   cout<<r<<size_of_matrix<<r/size_of_matrix<<"\n";
 	   if(matrices_produced != r/size_of_matrix){
 	       cout<<"b"<<"\n";
 	       return false;
