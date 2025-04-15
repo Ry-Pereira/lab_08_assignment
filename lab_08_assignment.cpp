@@ -80,37 +80,34 @@ private:
 	//Function for printing grid
 	void print_grid() {
 		//Prints to terminal the column numbers
-	    cout<< "Column ";
+	    cout<< "Col ";
 		//For in loop to iterate through eaach column and print a number to indicate position of cell
 	    for(int column = 1; column < number_of_columns+1; column++){
-			////Prints to terminal ouput a | to indicate a barrier spacing
-	        cout<< column << "|";
+			//Prints to terminal ouput a | to indicate a barrier spacing
+	        cout<< column << "| ";
 	    }
 		//Prints newline spacing
 	    cout<<"\n";
 		//For in loop to iterate throguh each row
 		for(int row= 0; row<number_of_rows; row++) {
 			//Pritns to terminal ouput the Row and number wiht a | to indicate barreier spacing and cell location
-	        cout<< "Row "<<row << "| ";
+	        cout<< "Row "<<row+1 << "| ";
 			//For in loop to iterate through each columns
 			for(int column = 0; column < number_of_columns; column++) {
 				//Prints to terminal ouput the value at grid of row by column location witha  space
+				if(grid[row][column] < 10){
+				    string num = "0" + to_string(grid[row][column]);
+				    cout<<num<< " ";
+				}
+				else{
 				cout<<grid[row][column]<< " ";
+				}
 			}
 			//Prints newline spacing
 			cout<<"\n";
 		}
 	}
 };
-
-
-int is_number(int number){
-	if(1 >= number && number <=9){
-		string result = "0" + to_string(number);
-
-	}
-}
-
 
 
 
