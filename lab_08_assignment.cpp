@@ -6,7 +6,7 @@
 //Other Sources:Github Copilot and ChatGPT 
 //Author: Ryan Antony Pereira
 //Creation Date: 3/26/2025
-//Last Modified Date: 4/1/2025
+//Last Modified Date: 4/14/2025
 
 //ChatGPT helped with debuggin, pointing out errors, helping me correct my code.
 
@@ -20,8 +20,7 @@
 #include <sstream>
 //Includes the C++ vector library for array manipulation and implementation
 #include <vector>
-//Includes the C++ typeinfo library for checking the data type of data
-#include <typeinfo>
+
 
 //Include the C++ cmath library to do the absolut value of a integer value to be turned to positive
 //Using standard namespace to avoid using std:: prefix
@@ -97,16 +96,19 @@ private:
 			//For in loop to iterate through each columns
 			for(int column = 0; column < number_of_columns; column++) {
 				//Prints to terminal ouput the value at grid of row by column location witha  space
+				//If the grid at row by colum value is positve an is between 0 and 10
 				if(grid[row][column] < 10 && grid[row][column] >= 0){
 					//Declares string num to the concatenation product of 0 and string converted of the grid at row by column
 				    string formmated_number = "0" + to_string(grid[row][column]);
 				    cout<<formmated_number << " ";
 				}
+				//If the grid at row by colum value is negative but is bewteen 0 and -10
 				else if(grid[row][column] < 0 && grid[row][column] > -10){
+					//Declares string num to the concatenation product of 0 and string converted of the grid at row by column of the absolut to positive then convert to be negative
 					string formmated_number = "-0" + to_string(abs(grid[row][column]));
 				    cout<<formmated_number << " ";
 				}
-				
+				//Else if the vvalue is positive or negative but is not between 0 or 10, so it does not need to be formatted
 				else{
 				//Prints to terminal ouput the value at grid of row by column location witha  space
 				cout<<grid[row][column]<< " ";
@@ -119,63 +121,96 @@ private:
 };
 
 
+//ChatGPT was used to error check and debug this function, and give suggestion to streamline the flow of this code process
 
-//Chatgpt suggested withr returnng a pair of Matrix objects in order to return two matrices
-
+//Function to to check if file is valid, it takes a string text file to validate the file, but also see if the matrixes inside of it are equal to matrixes produces to make sure the right number of matrixes are need to be extracted
 bool file_check(int matrices_produced,string text_file){
+
+	//Declares size of matrix to hold the matrix size
     int size_of_matrix;
+	//Declares an iftsream file object to read it
     ifstream matrix_file(text_file);
-    int rows_size = 0;
-    int amount_of_rows = 0;
+	//Declare a string line to store line of file
     string line;
-    int linr_number = 0;
-    string elem;
-    int r = 0;
+	//Declare and initialize the row amount to 0, to store the amount of rows
+    int row_amount = 0;
+	//Declare and initializes the got matrix size to false, in order to flag down if the matrix size was retrived
     bool got_matrix_size = false;
     
+	//If the matrix is unable to be opened, the file does not exist
     if(!matrix_file.is_open()){
+		//Prints to terminal that the file file name is not valid
+		cout<<"File name is not valid"<<"\n";
+		//Returns false to indicate it failed the file check
         return false;
     }
     
+	//Loops through each line in the file
 	while (getline(matrix_file,line)) {
+		//If the line size is empty, it skips it
 	    if(line.size()-1 == 0){
+			//Skips line and moves to next one
 	        continue;
 	    }
+		//Create a stringstream object to parse line
 	   stringstream ss(line);
+	   //Declare a string elem to store element value in each line in the file
 	   string elem;
+
 	   
+	   //If the matrix size has not been stored yet
 	   if(got_matrix_size == false){
+		//Reads the first value in line to size of matrix
 	       ss>> size_of_matrix;
+		   //Holds the integer space position of the line, to see if there is only value in the line
 	       int space_position = line.find(' ');
+		   //If there is any space, there is more values in the line, so it wont be passed as matrix size
 	       if(space_position >=1){
+				//Prints to terminal there is no matrix size
+			   cout<<"There is no matrix size"<<"\n";
+			   //Returns false to indicate there is no matrix size
 	           return false;
 	       }
+		   //If there is space, returns false to indcate there is space
 	       if(size_of_matrix <= 0){
+			//Prints to terminal that there is no matrix size
+			   cout<<"There is no matrix size"<<"\n";
+			   //Returns false to indicate there is no matrix size
 	           return false;
 	       }
-	       cout<<"Size of Matrix: "<<size_of_matrix<<"\n";
+		   //Sets got matrix size to true, to indicate the matrix size was retrieved
 	       got_matrix_size = true;
+		   //Continues to the next line in file
 	       continue;
 	   }
+	   //If the matrix size was retreived, the line contains matrix data
 	   if(got_matrix_size == true){
-	       int i = 0;
+		   //Declares the column num to 0, to indcate the number of column values occupying each line
+	       int column_num = 0;
 	       
+		   //Loops throuugh each value in the line as stores it in elem
     	   while(ss>> elem){
-    	       cout<<elem<<" ";
-    	       i++;
-	       }  
-	       if(i != size_of_matrix){
+    	       column_num++;
+	       } 
+		   //If the colum number is not equal to the size of matrix, then its not a valid nxn matrix, because there is not size of columns
+	       if(column_num != size_of_matrix){
+			   //Returns false to indcate there is not enough columns
+			   cout<<"There are not the right amount of columns in the matrix rows" << "\n";
 	           return false;
 	       }
-	       r++;
+		   //Increment row amount
+	       row_amount++;
+		   //Provides newline spacing
 	       cout<<"\n";
 	   }
 	   }
-	   if(matrices_produced != r/size_of_matrix){
-	       cout<<"b"<<"\n";
+	   //If the matrices produces is not equal to the row amoutn  divided by size of matrix, then there is not the right maount of matrixes in the text file
+	   if(matrices_produced != row_amount/size_of_matrix){
+			//Reutnrs false with message to indcate the text file has inconsistent matrixes in the file to the particaular operation
+	       cout<<"For this particular operation, it requires"<<matrices_produced<<" matrices to be in the text file"<<"\n";
 	       return false;
 	   }
-	   
+	   //Returns true to indcate it passed all checks, to indicate it is a valid matrix text file
 	   return true;
 
 }
@@ -183,7 +218,7 @@ bool file_check(int matrices_produced,string text_file){
 
 
 
-
+//Chatgpt suggested withr returnng a pair of Matrix objects in order to return two matrices
 
 //Function to return a created pair of 2 nxn matrices with string matrix text file arument passed in
 pair<Matrix,Matrix> create_matrices(string matrix_text_file) {
@@ -201,6 +236,7 @@ pair<Matrix,Matrix> create_matrices(string matrix_text_file) {
 	Matrix matrix1(0,0);
 	//Matrix object matrix 2 is declared and initialized with with a 0,0 pair passed in to indicate the vector grid is 0,0 in size
 	Matrix matrix2(0,0);
+	//Declares got matrix size to false, to indicate the flag if the matrix size was retrieved
 	bool got_matrix_size = false;
 
 	//Opens the matrix text file in the matrix file ifstream object for reading and extracting information
@@ -219,30 +255,39 @@ pair<Matrix,Matrix> create_matrices(string matrix_text_file) {
         			//Declares and initializes matrix1 to Matrix object with rows and columns passed in
         			matrix1 = Matrix(size_of_matrix,size_of_matrix);
         			matrix2 = Matrix(size_of_matrix,size_of_matrix);
+					//Sets the got matrxi size to tru to indicate the got matrix size to true
         			got_matrix_size = true;
 		        }
 		        else{
+					//Declares and intializes a stringstream object for parsing of the line
 		            std::stringstream ss(line);
+					//Declares and initializes cell elemtn to empty string
 		            string cell_element = "";
+					//For in loop to loop thorugh each column
 		            for(int column = 0; column< size_of_matrix; column++){
+						//Extracts the cell elemet in the lane delimited by space
 		                getline(ss,cell_element,' ');
+						//Ineger value is set to the cell element converted to integer
 		                int value = stoi(cell_element);
+						//If line number is is less than size matrix
 		                if(line_number < size_of_matrix){
+							//Stores the value at line number by column in matrix1
 		                    matrix1.store_value(line_number,column,value);
 		                }
 		                else{
+							//Stores the value at line number by column in matrix2
 		                    matrix2.store_value(line_number-size_of_matrix,column,value);
-		                   
-		                    
-		                }
-		                
+
+		                } 
 		            }
+					//Incremenets line number
 		            line_number++;
 		        }
 		        
 		    }
 		}
 	}
+	//Returns the pair of matrix1 and matrix2 in the pair
     return {matrix1,matrix2};
 }
 
@@ -322,9 +367,9 @@ void sum_diagonal(Matrix matrix_1) {
 		column_number--;
 	}
 	//Prints ouput to terminal the Matrix main diagonal sum 
-	cout<<"Matrix Main Diagonal Sum " << matrix_1_result_main_sum << "\n";
+	cout<<"Matrix Main Diagonal Sum: " << matrix_1_result_main_sum << "\n";
 	//Prints ouput to terminal the Matrix secondary diagonal sum 
-	cout<<"Matrix Secondary Diagonal Sum"<< matrix_1_result_secondary_sum << "\n";
+	cout<<"Matrix Secondary Diagonal Sum: "<< matrix_1_result_secondary_sum << "\n";
 }
 
 
@@ -483,9 +528,13 @@ void choice_selection() {
 		cout<<"Enter 2 nxn Matrix Numbers Text File Name: ";
 		//Stores the user input into matrix numbers text file name
 		cin >> matrix_numbers_text_file_name;
-		bool b = file_check(2,matrix_numbers_text_file_name);
-		if(b == 0){
-		    cout<<"invalid"<<"\n";
+		//Declares is_valid to the result of file check with 2 as matrix preoducd, and matrix numbers text file name passed in
+		bool is_valid = file_check(2,matrix_numbers_text_file_name);
+		//If is valid is 0, it invalid
+		if(is_valid == 0){
+			//Prints to terminal that is invalid
+		    cout<<"Invalid"<<"\n";
+			//Breaks out of case switch statement
 		    break;
 		}
 		//matrices pair stores result ouput of the executed function called create matrices with matrix numbers text filename passed in as argument this gives two matrixes
@@ -514,9 +563,13 @@ void choice_selection() {
 		cout<<"Enter 2 nxn Matrix Numbers Text File Name: ";
 		//Stores the user input into matrix numbers text file name
 		cin >> matrix_numbers_text_file_name;
-		bool b = file_check(2,matrix_numbers_text_file_name);
-		if(b == 0){
-		    cout<<"invalid"<<"\n";
+		//Declares is_valid to the result of file check with 2 as matrix preoducd, and matrix numbers text file name passed in
+		bool is_valid = file_check(2,matrix_numbers_text_file_name);
+		//If is valid is 0, it invalid
+		if(is_valid == 0){
+			//Prints to terminal that is invalid
+		    cout<<"Invalid"<<"\n";
+			//Breaks out of case switch statement
 		    break;
 		}
 		//matrices pair stores result ouput of the executed function called create matrices with matrix numbers text filename passed in as argument this gives two matrixes
@@ -541,9 +594,13 @@ void choice_selection() {
 		cout<<"Enter 2 nxn Matrix Numbers Text File Name: ";
 		//Stores the user input into matrix numbers text file name
 		cin >> matrix_numbers_text_file_name;
-		bool b = file_check(2,matrix_numbers_text_file_name);
-		if(b == 0){
-		    cout<<"invalid"<<"\n";
+		//Declares is_valid to the result of file check with 2 as matrix preoducd, and matrix numbers text file name passed in
+		bool is_valid = file_check(2,matrix_numbers_text_file_name);
+		//If is valid is 0, it invalid
+		if(is_valid == 0){
+			//Prints to terminal that is invalid
+		    cout<<"Invalid"<<"\n";
+			//Breaks out of case switch statement
 		    break;
 		}
 		//matrices pair stores result ouput of the executed function called create matrices with matrix numbers text filename passed in as argument this gives two matrixes
@@ -568,9 +625,13 @@ void choice_selection() {
 		cout<<"Enter Single nxn Matrix Numbers Text File Name: ";
 		//Stores the user input into matrix numbers text file name
 		cin >> matrix_numbers_text_file_name;
-		bool b = file_check(1,matrix_numbers_text_file_name);
-		if(b == 0){
-		    cout<<"invalid"<<"\n";
+		//Declares is_valid to the result of file check with 2 as matrix preoducd, and matrix numbers text file name passed in
+		bool is_valid = file_check(1,matrix_numbers_text_file_name);
+		//If is valid is 0, it invalid
+		if(is_valid == 0){
+			//Prints to terminal that is invalid
+		    cout<<"Invalid"<<"\n";
+			//Breaks out of case switch statement
 		    break;
 		}
 		//matrix stores result ouput of the executed function called create matrice with matrix numbers text filename passed in as argument
@@ -587,9 +648,13 @@ void choice_selection() {
 		cout<<"Enter Single nxn Matrix Numbers Text File Name: ";
 		//Stores the user input into matrix numbers text file name
 		cin >> matrix_numbers_text_file_name;
-		bool b = file_check(1,matrix_numbers_text_file_name);
-		if(b == 0){
-		    cout<<"invalid"<<"\n";
+		//Declares is_valid to the result of file check with 2 as matrix preoducd, and matrix numbers text file name passed in
+		bool is_valid = file_check(1,matrix_numbers_text_file_name);
+		//If is valid is 0, it invalid
+		if(is_valid == 0){
+			//Prints to terminal that is invalid
+		    cout<<"Invalid"<<"\n";
+			//Breaks out of case switch statement
 		    break;
 		}
 		pair<Matrix,Matrix> matrices = create_matrices(matrix_numbers_text_file_name);
@@ -634,9 +699,13 @@ void choice_selection() {
 		cout<<"Enter Single nxn Matrix Numbers Text File Name: ";
 		//Stores the user input into matrix numbers text file name
 		cin >> matrix_numbers_text_file_name;
-		bool b = file_check(1,matrix_numbers_text_file_name);
-		if(b == 0){
-		    cout<<"invalid"<<"\n";
+		//Declares is_valid to the result of file check with 2 as matrix preoducd, and matrix numbers text file name passed in
+		bool is_valid = file_check(1,matrix_numbers_text_file_name);
+		//If is valid is 0, it invalid
+		if(is_valid == 0){
+			//Prints to terminal that is invalid
+		    cout<<"Invalid"<<"\n";
+			//Breaks out of case switch statement
 		    break;
 		}
 		pair<Matrix,Matrix> matrices = create_matrices(matrix_numbers_text_file_name);
@@ -677,9 +746,13 @@ void choice_selection() {
 		cout<<"Enter Single nxn Matrix Numbers Text File Name: ";
 		//Stores the user input into matrix numbers text file name
 		cin >> matrix_numbers_text_file_name;
-		bool b = file_check(1,matrix_numbers_text_file_name);
-		if(b == 0){
-		    cout<<"invalid"<<"\n";
+		//Declares is_valid to the result of file check with 2 as matrix preoducd, and matrix numbers text file name passed in
+		bool is_valid = file_check(1,matrix_numbers_text_file_name);
+		//If is valid is 0, it invalid
+		if(is_valid == 0){
+			//Prints to terminal that is invalid
+		    cout<<"Invalid"<<"\n";
+			//Breaks out of case switch statement
 		    break;
 		}
 		pair<Matrix,Matrix> matrices = create_matrices(matrix_numbers_text_file_name);
@@ -719,13 +792,14 @@ void choice_selection() {
 			break;
 		}
 		
-		if(value >=0 || !value <=0){
+		//If value is valid and is a real number
+		if(value >=0 && value <= 0){
+		    //Prints to terminal that the value is not a real number
 		    cout<<"Value needs to be a real number"<<"\n";
+		    //Breaks out of swicth statement
 		    break;
 		}
-		if(typeid(value).name() != "i"){
-		    cout<<"Value needs to be a re number"<<"\n";
-		}
+		
 		
 		else{
 			//Result matrix stores the updated matrix result from the update matrix function with matrix,row,column, and value input. The matrix is updated with the value stored in the grid at row by cloumn location
