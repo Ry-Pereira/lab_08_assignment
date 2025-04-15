@@ -20,6 +20,8 @@
 #include <sstream>
 //Includes the C++ vector library for array manipulation and implementation
 #include <vector>
+
+#include <typeinfo>
 //Using standard namespace to avoid using std:: prefix
 using namespace std;
 
@@ -122,26 +124,56 @@ bool file_check(int matrices_produced,string text_file){
     string line;
     int linr_number = 0;
     string elem;
+    int r = 0;
     bool got_matrix_size = false;
     
     if(!matrix_file.is_open()){
         return false;
     }
+    
 	while (getline(matrix_file,line)) {
+	    if(line.size()-1 == 0){
+	        continue;
+	    }
 	   stringstream ss(line);
 	   string elem;
-	   if(line.size()got_matrix_size == false){
+	   
+	   if(got_matrix_size == false){
 	       ss>> size_of_matrix;
-	       got_matrix_size == true
+	       int space_position = line.find(' ');
+	       if(space_position >=1){
+	           return false;
+	       }
+	       if(size_of_matrix <= 0){
+	           return false;
+	       }
+	       cout<<"Size of Matrix: "<<size_of_matrix<<"\n";
+	       got_matrix_size = true;
+	       continue;
 	   }
 	   if(got_matrix_size == true){
 	       int i = 0;
+	       
     	   while(ss>> elem){
+    	       cout<<elem<<" ";
     	       i++;
-    	       cout<<elem<<"\n";
-	       }    
+	       }  
+	       if(i != size_of_matrix){
+	           return false;
+	       }
+	       r++;
+	       cout<<"\n";
 	   }
-	}
+	   }
+	   cout<<matrices_produced<<"\n";
+	   cout<<r<<size_of_matrix<<r/size_of_matrix<<"\n";
+	   if(matrices_produced != r/size_of_matrix){
+	       cout<<"b"<<"\n";
+	       return false;
+	   }
+	   
+	   return true;
+
 }
 
 
@@ -190,7 +222,6 @@ pair<Matrix,Matrix> create_matrices(string matrix_text_file) {
 		            string cell_element = "";
 		            for(int column = 0; column< size_of_matrix; column++){
 		                getline(ss,cell_element,' ');
-		                cout<<"bot: "<<cell_element<<"\n";
 		                int value = stoi(cell_element);
 		                if(line_number < size_of_matrix){
 		                    matrix1.store_value(line_number,column,value);
@@ -449,7 +480,10 @@ void choice_selection() {
 		//Stores the user input into matrix numbers text file name
 		cin >> matrix_numbers_text_file_name;
 		bool b = file_check(2,matrix_numbers_text_file_name);
-		cout<<"is valid"<<b<<"\n";
+		if(b == 0){
+		    cout<<"invalid"<<"\n";
+		    break;
+		}
 		//matrices pair stores result ouput of the executed function called create matrices with matrix numbers text filename passed in as argument this gives two matrixes
 		pair<Matrix,Matrix> matrices = create_matrices(matrix_numbers_text_file_name);
 		//Matrix1 is set to the first of the matrices pair
@@ -476,6 +510,11 @@ void choice_selection() {
 		cout<<"Enter 2 nxn Matrix Numbers Text File Name: ";
 		//Stores the user input into matrix numbers text file name
 		cin >> matrix_numbers_text_file_name;
+		bool b = file_check(2,matrix_numbers_text_file_name);
+		if(b == 0){
+		    cout<<"invalid"<<"\n";
+		    break;
+		}
 		//matrices pair stores result ouput of the executed function called create matrices with matrix numbers text filename passed in as argument this gives two matrixes
 		pair<Matrix,Matrix> matrices = create_matrices(matrix_numbers_text_file_name);
 		//Matrix1 is set to the first of the matrices pair
@@ -498,6 +537,11 @@ void choice_selection() {
 		cout<<"Enter 2 nxn Matrix Numbers Text File Name: ";
 		//Stores the user input into matrix numbers text file name
 		cin >> matrix_numbers_text_file_name;
+		bool b = file_check(2,matrix_numbers_text_file_name);
+		if(b == 0){
+		    cout<<"invalid"<<"\n";
+		    break;
+		}
 		//matrices pair stores result ouput of the executed function called create matrices with matrix numbers text filename passed in as argument this gives two matrixes
 		pair<Matrix,Matrix> matrices = create_matrices(matrix_numbers_text_file_name);
 		//Matrix1 is set to the first of the matrices pair
@@ -520,6 +564,11 @@ void choice_selection() {
 		cout<<"Enter Single nxn Matrix Numbers Text File Name: ";
 		//Stores the user input into matrix numbers text file name
 		cin >> matrix_numbers_text_file_name;
+		bool b = file_check(1,matrix_numbers_text_file_name);
+		if(b == 0){
+		    cout<<"invalid"<<"\n";
+		    break;
+		}
 		//matrix stores result ouput of the executed function called create matrice with matrix numbers text filename passed in as argument
 		pair<Matrix,Matrix> matrices = create_matrices(matrix_numbers_text_file_name);
 		//Sum diagoanl function is executed with matrix input passed in as arugment to count up the main and secodnary sum diagonal
@@ -534,6 +583,12 @@ void choice_selection() {
 		cout<<"Enter Single nxn Matrix Numbers Text File Name: ";
 		//Stores the user input into matrix numbers text file name
 		cin >> matrix_numbers_text_file_name;
+		bool b = file_check(1,matrix_numbers_text_file_name);
+		if(b == 0){
+		    cout<<"invalid"<<"\n";
+		    break;
+		}
+		pair<Matrix,Matrix> matrices = create_matrices(matrix_numbers_text_file_name);
 		//matrix stores result ouput of the executed function called create matrice with matrix numbers text filename passed in as argument
 		//pair<Matrix,Matrix> matrices = create_matrice(matrix_numbers_text_file_name);
 		//Declares integer row1
@@ -552,7 +607,7 @@ void choice_selection() {
 		cin >> row2;
 
 		//Checks to see if row1 and row2 is out of bounds
-		if(row1-1 < 0 || row1-1 > matrix.get_number_of_rows() || row2-1 < 0 || row2-1 > matrix.get_number_of_rows() ){
+		if(row1-1 < 0 || row1-1 > matrices.first.get_number_of_rows() || row2-1 < 0 || row2-1 > matrices.first.get_number_of_rows() ){
 			//Prints to terminal that the Row number is out of bounds
 			cout<<"Row number is out of bounds"<< "\n";
 			//Break out of switch case
@@ -561,7 +616,7 @@ void choice_selection() {
 		
 		else{
     		//Result matrix stores the updated matrix of result from the executed swap rows function with matrix,row1, and row2 passed in arguments, to swap the row valus
-    		result_matrix = swap_rows(matrix,row1-1,row2-1);
+    		result_matrix = swap_rows(matrices.first,row1-1,row2-1);
     		//Result matrix object executes the print grid function
     		result_matrix.print_grid();
     		//Break statement to get out of switch case statement
@@ -575,6 +630,12 @@ void choice_selection() {
 		cout<<"Enter Single nxn Matrix Numbers Text File Name: ";
 		//Stores the user input into matrix numbers text file name
 		cin >> matrix_numbers_text_file_name;
+		bool b = file_check(1,matrix_numbers_text_file_name);
+		if(b == 0){
+		    cout<<"invalid"<<"\n";
+		    break;
+		}
+		pair<Matrix,Matrix> matrices = create_matrices(matrix_numbers_text_file_name);
 		//matrix stores result ouput of the executed function called create matrice with matrix numbers text filename passed in as argument
 		//matrix = create_matrice(matrix_numbers_text_file_name);
 		//Declares integer column1
@@ -590,7 +651,7 @@ void choice_selection() {
 		//Stores user input in column2
 		cin >> column2;
 		//If column1 and column2 are out of bound of the number of columns
-		if(column1-1 < 0 || column1-1 > matrix.get_number_of_columns() || column2-1 < 0 || column2-1 > matrix.get_number_of_columns() ){
+		if(column1-1 < 0 || column1-1 > matrices.first.get_number_of_columns() || column2-1 < 0 || column2-1 >= matrices.first.get_number_of_columns() ){
 			//Prints to termianl that the column is out of bounds
 			cout<<"Column number is out of bounds"<<"\n";
 			//Breaks out of switch statement
@@ -598,7 +659,7 @@ void choice_selection() {
 		}
 		else{
 			//Result matrix stores the updated matrix of result from the executed swap columns function with matrix,column1, and column2 passed in arguments, to swap the column valus
-			result_matrix = swap_columns(matrix,column1-1,column2-1);
+			result_matrix = swap_columns(matrices.first,column1-1,column2-1);
 			//Result matrix object executes the print grid function
 			result_matrix.print_grid();
 			//Break statement to get out of switch case statement
@@ -612,6 +673,12 @@ void choice_selection() {
 		cout<<"Enter Single nxn Matrix Numbers Text File Name: ";
 		//Stores the user input into matrix numbers text file name
 		cin >> matrix_numbers_text_file_name;
+		bool b = file_check(1,matrix_numbers_text_file_name);
+		if(b == 0){
+		    cout<<"invalid"<<"\n";
+		    break;
+		}
+		pair<Matrix,Matrix> matrices = create_matrices(matrix_numbers_text_file_name);
 		//matrix stores result ouput of the executed function called create matrice with matrix numbers text filename passed in as argument
 		//matrix = create_matrices(matrix_numbers_text_file_name);
 		//Declares integer column
@@ -634,22 +701,31 @@ void choice_selection() {
 		cin>>value;
 
 		//Checks to see if the column is out of bounds
-		if(column1-1 < 0 || column1-1 > matrix.get_number_of_columns() ){
+		if(column1-1 < 0 || column1-1 >= matrices.first.get_number_of_columns() ){
 			//Prints to the terminal that the column number is out of bounds
 			cout<<"Column number is out of bounds" << "\n";
 			//Breaks out of swicth statement
 			break;
 		}
 		//Checks to see if the row is out of bounds
-		if(row1-1 < 0 || row1-1 > matrix.get_number_of_rows() ){
+		if(row1-1 < 0 || row1-1 >= matrices.first.get_number_of_rows() ){
 			//Prints to the terminal that the column number is out of bounds
 			cout<<"Row number is out of bounds" << "\n";
 			//Breaks out of swicth statement
 			break;
 		}
+		
+		if(value >=0 || !value <=0){
+		    cout<<"Value needs to be a real number"<<"\n";
+		    break;
+		}
+		if(typeid(value).name() != "i"){
+		    cout<<"Value needs to be a re number"<<"\n";
+		}
+		
 		else{
 			//Result matrix stores the updated matrix result from the update matrix function with matrix,row,column, and value input. The matrix is updated with the value stored in the grid at row by cloumn location
-			result_matrix = update_matrix(matrix,row1-1,column1-1,value);
+			result_matrix = update_matrix(matrices.first,row1-1,column1-1,value);
 			//Result matrix object executes the print grid function
 			result_matrix.print_grid();
 			//Break statement to get out of switch case statement
