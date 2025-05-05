@@ -127,7 +127,7 @@ private:
 bool file_check(int matrices_produced,string text_file){
 
 	//Declares size of matrix to hold the matrix size
-    int size_of_matrix;
+    int size_of_matrix = 0;
 	//Declares an iftsream file object to read it
     ifstream matrix_file(text_file);
 	//Declare a string line to store line of file
@@ -148,7 +148,7 @@ bool file_check(int matrices_produced,string text_file){
 	//Loops through each line in the file
 	while (getline(matrix_file,line)) {
 		//If the line size is empty, it skips it
-	    if(line.size()-1 == 0){
+	    if(line.empty()){
 			//Skips line and moves to next one
 	        continue;
 	    }
@@ -157,6 +157,7 @@ bool file_check(int matrices_produced,string text_file){
 	   //Declare a string elem to store element value in each line in the file
 	   string elem;
 
+	   //Chatgpt helped me revise this section so that matrix size will actually be found
 	   
 	   //If the matrix size has not been stored yet
 	   if(got_matrix_size == false){
@@ -165,19 +166,14 @@ bool file_check(int matrices_produced,string text_file){
 		   //Holds the integer space position of the line, to see if there is only value in the line
 	       int space_position = line.find(' ');
 		   //If there is any space, there is more values in the line, so it wont be passed as matrix size
-	       if(space_position >=1){
+	       if(ss >> elem || size_of_matrix <= 0){
 				//Prints to terminal there is no matrix size
 			   cout<<"There is no matrix size"<<"\n";
 			   //Returns false to indicate there is no matrix size
 	           return false;
 	       }
-		   //If there is space, returns false to indcate there is space
-	       if(size_of_matrix <= 0){
-			//Prints to terminal that there is no matrix size
-			   cout<<"There is no matrix size"<<"\n";
-			   //Returns false to indicate there is no matrix size
-	           return false;
-	       }
+           
+		   
 		   //Sets got matrix size to true, to indicate the matrix size was retrieved
 	       got_matrix_size = true;
 		   //Continues to the next line in file
@@ -190,12 +186,14 @@ bool file_check(int matrices_produced,string text_file){
 	       
 		   //Loops throuugh each value in the line as stores it in elem
     	   while(ss>> elem){
+				//Column num is incremented
     	       column_num++;
 	       } 
 		   //If the colum number is not equal to the size of matrix, then its not a valid nxn matrix, because there is not size of columns
 	       if(column_num != size_of_matrix){
 			   //Returns false to indcate there is not enough columns
 			   cout<<"There are not the right amount of columns in the matrix rows" << "\n";
+			   //Return false
 	           return false;
 	       }
 		   //Increment row amount
@@ -204,10 +202,19 @@ bool file_check(int matrices_produced,string text_file){
 	       cout<<"\n";
 	   }
 	   }
+	   //If the matrix size was not retrieved
+       if(!got_matrix_size){
+		//Prints to output the matrix size was not found in the file
+        cout<<"Matrix Size not found in file" << "\n";
+		//Returns false
+        return false;
+       }
+
 	   //If the matrices produces is not equal to the row amoutn  divided by size of matrix, then there is not the right maount of matrixes in the text file
-	   if(matrices_produced != row_amount/size_of_matrix){
+	   if(row_amount % size_of_matrix != 0 || matrices_produced != row_amount/size_of_matrix){
 			//Reutnrs false with message to indcate the text file has inconsistent matrixes in the file to the particaular operation
 	       cout<<"For this particular operation, it requires"<<matrices_produced<<" matrices to be in the text file"<<"\n";
+		   //Returns false
 	       return false;
 	   }
 	   //Returns true to indcate it passed all checks, to indicate it is a valid matrix text file
@@ -242,50 +249,74 @@ pair<Matrix,Matrix> create_matrices(string matrix_text_file) {
 	//Opens the matrix text file in the matrix file ifstream object for reading and extracting information
 	ifstream matrix_file(matrix_text_file);
 	//The matrix file is opened
-	if (matrix_file.is_open()) {
+	if (!matrix_file.is_open()) {
 		//Continously goes through line by line in matrix file until there are no more lines to read
-		while (getline(matrix_file,line)) {
-		    if(line.size()-1 != 0){
-		        //Declares and intializes a stringstream object for parsing of the line
-				std::stringstream ss(line);
-		        if(got_matrix_size == false){
-		            std::stringstream ss(line);
-        			//Extracts the matrix size form the stirng stream object for storing in size of matrix
-        			ss >> size_of_matrix;
-        			//Declares and initializes matrix1 to Matrix object with rows and columns passed in
-        			matrix1 = Matrix(size_of_matrix,size_of_matrix);
-        			matrix2 = Matrix(size_of_matrix,size_of_matrix);
-					//Sets the got matrxi size to tru to indicate the got matrix size to true
-        			got_matrix_size = true;
-		        }
-		        else{
-					//Declares and intializes a stringstream object for parsing of the line
-		            std::stringstream ss(line);
-					//Declares and initializes cell elemtn to empty string
-		            string cell_element = "";
-					//For in loop to loop thorugh each column
-		            for(int column = 0; column< size_of_matrix; column++){
-						//Extracts the cell elemet in the lane delimited by space
-		                getline(ss,cell_element,' ');
-						//Ineger value is set to the cell element converted to integer
-		                int value = stoi(cell_element);
-						//If line number is is less than size matrix
-		                if(line_number < size_of_matrix){
-							//Stores the value at line number by column in matrix1
-		                    matrix1.store_value(line_number,column,value);
-		                }
-		                else{
-							//Stores the value at line number by column in matrix2
-		                    matrix2.store_value(line_number-size_of_matrix,column,value);
-
-		                } 
-		            }
-					//Incremenets line number
-		            line_number++;
-		        }
-		        
-		    }
+        cout<<"Matrix file is unable to be opened"<<"\n";
+        return {matrix1,matrix2};
+    }
+	//While loop to continously go through each lin in the matrix file
+	while (getline(matrix_file,line)) {
+		//If line is empty
+		if(line.empty())
+			//Continues in the loop 
+            continue;
+            
+		//Chatgpt helped me revise this section so that matrices will be actually returned. As I was having initial issue with it. Below code revision helped out.
+            
+		//Declares and intializes a stringstream object for parsing of the line
+		std::stringstream ss(line);
+		if(!got_matrix_size){
+		
+        	//Extracts the matrix size form the stirng stream object for storing in size of matrix
+        	ss >> size_of_matrix;
+			//If the size of matrix is less than or equal to 0
+        	if(size_of_matrix <= 0){
+				//Prints to ouptut that the matrix size is nvalud
+                cout<<"Invalud matrix size"<<"\n";
+				//Return pair of empty matrices
+                return {Matrix(0,0),Matrix(0,0)};
+            }
+            //Declares and initializes matrix1 to Matrix object with rows and columns passed in
+    		matrix1 = Matrix(size_of_matrix,size_of_matrix);
+			//Declares and initializes matrix2 to Matrix object with rows and columns passed in
+    		matrix2 = Matrix(size_of_matrix,size_of_matrix);
+			//Sets got matrix size to true
+        	got_matrix_size = true;
+			//Continue on in the loop
+            continue;
 		}
+		    
+		//ChatGPT suggested before way to find if there are missing values in the row
+		//ChatGPT also helped find a better way of storing matrix values
+		
+		//For in loop to loop thorugh each column
+		for(int column = 0; column< size_of_matrix; column++){
+			//Delcares string cell element to empty string
+			string cell_element = "";
+			//If the cell element is not retrieved
+			if(!(ss>> cell_element)){
+				//Prints to ouput that there is missing values in the row
+				cout<<"Missing values in the row"<<"\n";
+				//Returns a pair of empty matrixes
+				return {Matrix(0,0),Matrix(0,0)};
+			}
+			//Ineger value is set to the cell element converted to integer
+		    int value = stoi(cell_element);
+			
+			//If the line number is less than size of matrix
+		    if(line_number < size_of_matrix){
+				//Matrix 1 stores the value of the line number minus size of matrix as row, column as column, and value as the value to be stored
+		        matrix1.store_value(line_number,column,value);
+			}
+			//If the line number is more than the size of matrix
+			else{
+				//Matrix 2 stores the value of the line number minus size of matrix as row, column as column, and value as the value to be stored
+				matrix2.store_value(line_number-size_of_matrix,column,value);
+			}
+		}
+		//Line number is incremented
+		line_number++;
+		    
 	}
 	//Returns the pair of matrix1 and matrix2 in the pair
     return {matrix1,matrix2};
